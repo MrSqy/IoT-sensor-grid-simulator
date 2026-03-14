@@ -26,3 +26,8 @@ exports/*.jsonl
 
 # Pygame
 *.pyc
+
+# PyInstaller
+build/
+dist/
+*.spec
