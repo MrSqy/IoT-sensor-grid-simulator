@@ -1,0 +1,1 @@
+t,sensor_id,sensor_name,sx,sy,modes,temp_c,co_ppm,co2_ppm,h2_ppm,gas_total_ppm,battery,active,efficiency,range_tiles,limit,max_limit,threat_active,threat_area,threat_points_count
