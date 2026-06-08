@@ -54,7 +54,7 @@ Pygame tabanlı, gerçek zamanlı bir IoT sensör ağı simülasyonu. Sıcaklık
 ## Kurulum
 
 ```bash
-git clone https://github.com/KULLANICI_ADI/IoT-Grid-Simulator.git
+git clone https://github.com/MrSqy/IoT-Grid-Simulator.git
 cd IoT-Grid-Simulator
 
 python3 -m venv venv
@@ -135,6 +135,6 @@ Bu proje **Baran Bey** tarafından tasarlanmış ve geliştirilmiştir. Projenin
 
 Kod yazım sürecinde **Anthropic Claude Opus 4.6** yapay zeka modelinden teknik destek alınmıştır. AI desteği kod implementasyonu, hata düzeltme ve optimizasyon önerileri ile sınırlıdır; projenin fikri mülkiyeti ve yaratıcı yönü tamamen geliştiriciye aittir.
 
-## Lisans
+## 📜 Lisans
 
-MIT License — detaylar için [LICENSE](LICENSE) dosyasına bakınız.
+[MIT](LICENSE) — `2026 Baran Demir B.`
