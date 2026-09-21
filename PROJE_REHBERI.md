@@ -113,8 +113,8 @@ Her sabit adımda:
 2. Ağaçların sıcaklık altında kalma süresi güncellenir.
 3. Adım sayısı artırılarak simülasyon zamanı bulunur.
 4. Sensörlerin enerji ve örnekleme sayaçları ilerletilir.
-5. Yeni ölçüm/durum varsa alarm kararı hesaplanır.
-6. Ölçüm geçmişi ve çıktı dosyaları güncellenir; tutuşmalar olay olarak yazılır.
+5. Her adımda alarm saati, bildirim aralığı ve kota yenilenir; karar son geçerli ölçüm üzerinden değerlendirilir.
+6. Yeni örnek/durumlar `_record_sensor` ile geçmişe ve dosyaya yazılır; tutuşmalar o adımın zamanıyla kaydedilir.
 
 `steps × STEP` kullanmak, zamanı uzun süre boyunca tekrar tekrar kayan noktalı sayı ekleyerek biriktirme hatasını azaltır. Sayaçlarda küçük toleranslar, 0,999999999 gibi değerlerin bir sonraki örneği gereksiz geciktirmesini önler.
 
@@ -158,7 +158,9 @@ Bir kanal önce alarmda değilse `değer >= açılış_eşiği` ile alarma girer
 
 `AlarmBridge.update` önce silinen sensörlere ait canlı durumları temizler. Her sensör için kalıcı kota bulur veya oluşturur. Ölçüm geçerliyse önceki kanal alarm kümesiyle yeni küme karşılaştırılır. Yalnız geçişler `_emit` ile olay yapılır. Sensörün genel durumu aynı sonuçtan türetilir; panel ayrı eşik karşılaştırmaz.
 
-İlk ALERT ve CALM geçişleri kotadan bağımsızdır. Tekrar bildirimi sıfırsa kapalıdır. Pozitifse seçilen aralıkta alarm sürerken tekrarlı bildirim denenir; yalnız bu tekrar kota tüketir. Kota bittiğinde alarm görünümü ve dosya kaydı sürer. Kota yenilenmesi değerlendirme anında yapılır; varsayılan bir saniyelik örneklemede panel de bu hızda güncellenir.
+İlk ALERT ve CALM geçişleri kotadan bağımsızdır. Tekrar bildirimi sıfırsa kapalıdır. Pozitifse seçilen aralıkta alarm sürerken tekrarlı bildirim denenir; yalnız bu tekrar kota tüketir. Kota bittiğinde alarm görünümü ve dosya kaydı sürer. Bildirim ve kota saatleri her 0,05 saniyelik model adımında güncellenir. Örneğin cihaz 10 saniyede bir ölçüyor ve tekrar aralığı 1 saniye ise 10. saniyedeki alarma ait tekrarlar 11, 12 ve 13. saniyelerde üretilebilir. Bu tekrarlar yeni bir sensör ölçümü değildir; son geçerli alarm durumunu bildirir.
+
+`Simulation.invalidate_sensor` editörden sensörü veya kanalını kapattığında eski değerleri `None` yapar, ortak alarm durumunu günceller ve aynı simülasyon zamanında `_record_sensor` çağırır. Böylece arayüzdeki OFF/WAITING/EMPTY geçişi hem grafikte boşluk hem CSV'de geçersiz değer olarak görünür; henüz yeni örnek gelmeden eski ölçüm devam ediyormuş izlenimi verilmez.
 
 `CALCULATOR.EventEngine` eski bağımsız ders örneğidir; yeni arayüzün alarmını hesaplamaz. Yeni uygulama CALCULATOR'den yalnız saat verilebilen `RateLimiter` kullanır. Böylece eski örnekteki genel eşik, yeni kanal eşikleriyle yarışmaz.
 
@@ -184,11 +186,13 @@ Her yanabilir engelde teorik sıcaklık hesaplanır. Sıcaklık tutuşma eşiği
 
 JSON, anahtar/değer ve listelerden oluşan taşınabilir metin biçimidir. `scene.py` enum ve kümeleri JSON'a çevirmeden önce düzenler. Canlı grafik geçmişi, alarm listesi, rastgele üretecin ara durumu veya kısmen bitmiş ölçüm sayacı sahneye yazılmaz.
 
+Sahne sınırları `scene.py` içinde ortaktır: en fazla 500 nesne, drone başına 500 rota durağı, 1–1.000.000.000 arasında nesne kimliği ve UTF-8 olarak en fazla 2.000.000 bayt. Editör ve model işlemleri nesne/rota sınırını aşan eylemi mevcut düzeni değiştirmeden reddeder. Rota sınırına ulaşınca eldeki geçerli taslak K ile kaydedilebilir.
+
 Kayıtta güncel yerleşim, kalan pil ve ayarlar yeni başlangıç koşulları olarak saklanır. Başa dön farklıdır: çalıştırma öncesi yakalanan başlangıca döner. Deney sırasında ayar değişirse `changes.jsonl` bu anı ve düzeni kaydeder; otomatik eylem tekrar oynatıcısı bu sürümde yoktur.
 
 Yükleme sırası: dosya boyutunu kontrol et → JSON çöz → sürüm/alan/tür/sınır kontrolü → kimlik ve yük referanslarını denetle → yeni nesneleri oluştur → ancak bundan sonra mevcut sahneyi değiştir. NaN, sonsuz, bool yerine sayı, tekrarlı kimlik, olmayan drone ve hatalı eşik bantları reddedilir.
 
-Kaydetme önce aynı dizinde geçici dosya yazar, dosyayı diske gönderir, sonra `os.replace` ile hedefi değiştirir. Böylece yarım yazılmış hedef bırakılmaz. Kullanıcının açıkça seçtiği mevcut sahne dosyası Kaydet işlemiyle güncellenebilir. Sonuç oturumları ise benzersiz klasörde `x` (yalnız yeni dosya) moduyla açılır.
+Kaydetme önce tam JSON metnini UTF-8 baytlarına çevirerek yükleyiciyle aynı 2 MB sınırını kontrol eder; sınır aşılırsa mevcut dosyaya dokunmaz. Ardından aynı dizinde geçici dosya yazar, dosyayı diske gönderir, sonra `os.replace` ile hedefi değiştirir. Böylece yarım yazılmış hedef bırakılmaz. Kullanıcının açıkça seçtiği mevcut sahne dosyası Kaydet işlemiyle güncellenebilir. Sonuç oturumları ise benzersiz klasörde `x` (yalnız yeni dosya) moduyla açılır.
 
 Sonuç şeması 2:
 
@@ -238,7 +242,9 @@ Her tekil dosyanın amacı ve bütün fonksiyonlar [kaynak ekinde](docs/KOD_REHB
 
 **Bir ölçüm al:** Tek adım → App.action → begin_recording → Exporter/başlangıç metadata → Simulation.advance → update_uavs → spread_fire → simulate_tick → AlarmBridge.update → _emit → Exporter.log_event → history → log_sensor → draw_graph.
 
-**Sahne yükle:** Yükle → prompt → yazı girişi → Enter → submit → load_scene → parse_scene → replace_sim. Yeni Simulation oluşamazsa eski deney ve açık sonuç oturumu korunur. Hata App.process_event içinde kullanıcı mesajına dönüşür.
+**Sahne yükle:** Yükle → prompt → yazı girişi → Enter → submit → load_scene → parse_scene → replace_sim. Yeni Simulation oluşamazsa eski deney ve açık sonuç oturumu korunur. Başarılı değiştirmede eski sürükleme, kaydırma, araç ve rota taslağı temizlenir; önceki sahneye ait yarım bir giriş yeni sahneye uygulanmaz. Hata App.process_event içinde kullanıcı mesajına dönüşür.
+
+**Sensörü kapat:** App.action → enabled alanını değiştir → Simulation.invalidate_sensor → invalidate ile eski ölçümü temizle → AlarmBridge.update → _record_sensor ile grafik/CSV boşluğu → App.change ile deneyi duraklat ve değişikliği kaydet. Haritadan ekleme ve sürükleyerek yükleme de aynı change üzerinden duraklatılır.
 
 **Sağ tıkla drone sil:** doğru event.pos dünya koordinatına çevrilir → kimlik seçilir → aynı delete eylemi → operations.delete_entity → release_cargo yerleri önceden bulur → bütün referanslar güncellenir → alarm canlı durumları temizlenir → değişiklik zamanıyla yazılır. DEL aynı action yoluna gider.
 

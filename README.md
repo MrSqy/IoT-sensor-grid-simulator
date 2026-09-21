@@ -76,6 +76,10 @@ Bu uygulama basit eğitim modelleri kullanır. Teorik alan sensörün çevreyi g
 
 `IoT PyGame/` eski/alternatif sürümdür; kaynakları ve ikonları korunmuştur. Güncel giriş `main.py` dosyasıdır. `CALCULATOR.py` bağımsız sınıf/olay örneğini de içerir; güncel uygulama onun saat enjekte edilebilen kota sınıfını kullanır.
 
+## Sahne sınırları
+
+Bir sahne en fazla 500 nesne, drone başına 500 durak ve UTF-8 JSON olarak 2 MB içerebilir. Sınırı aşan düzenleme reddedilir; çok büyük sahne kaydedilirken mevcut dosya korunur. Düzenleme deneyi duraklatır. Sensör/kanal kapatıldığında grafik ve CSV'de ölçüm yokluğu açıkça kaydedilir.
+
 ## Katkı ve lisans
 
 Projenin fikri, konsepti ve tasarım sahipliği **Baran Demir B.**'ye aittir. İlk sürümde Anthropic Claude Opus 4.6 ile kod desteği alınmıştır. Bu sürüm kullanıcı tarafından onaylanan öğretici deney kapsamı doğrultusunda geliştirilmiştir.

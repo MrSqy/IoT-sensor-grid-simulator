@@ -7735,10 +7735,10 @@ Satır 7: Gereken isimleri içeri al: from .simulation import Simulation
 from .simulation import Simulation
 ```
 
-Satır 8: Gereken isimleri içeri al: from .scene import load_scene, save_scene, to_scene, parse_scene
+Satır 8: Gereken isimleri içeri al: from .scene import load_scene, save_scene, to_scene, parse_scene, MAX_ROUTE_POINTS
 
 ```python
-from .scene import load_scene, save_scene, to_scene, parse_scene
+from .scene import load_scene, save_scene, to_scene, parse_scene, MAX_ROUTE_POINTS
 ```
 
 Satır 9: Gereken isimleri içeri al: from .lessons import lesson_scene, LESSONS
@@ -7807,7 +7807,7 @@ Satır 20: Değeri/alanı oluştur veya güncelle: SPEEDS = (0.25, 1, 2, 5)
 SPEEDS=(.25,1,2,5)
 ```
 
-Satır 503: Koşula göre yol seç: __name__ == '__main__'
+Satır 505: Koşula göre yol seç: __name__ == '__main__'
 
 ```python
 if __name__=="__main__":
@@ -8243,21 +8243,23 @@ Editör değişikliklerini deney çıktısında zamanıyla kaydet.
 
 **Girdiler:** self, description. self varsa üzerinde işlem yapılan örnektir.
 **Çıktı:** Açık return yok: None. Etki atama, çizim, dosya veya çağrılan işlem üzerinden oluşur.
-**Atanan yerel değerler / durum alanları:** self.sim.revision, self.sim.baseline
+**Atanan yerel değerler / durum alanları:** self.playing, self.sim.revision, self.sim.baseline
 **Bağlandığı işlevler:** self.sim.snapshot, self.exporter.log_change
 **Açık hata yolları:** Bu gövdede açık raise yok; çağrılan işlevlerden hata gelebilir.
 
 **İşleyiş sırası:**
 
-1. Değeri/alanı oluştur veya güncelle: self.sim.revision += 1
-2. Koşula göre yol seç: self.sim.time == 0
-3. Koşula göre yol seç: self.exporter
+1. Değeri/alanı oluştur veya güncelle: self.playing = False
+2. Değeri/alanı oluştur veya güncelle: self.sim.revision += 1
+3. Koşula göre yol seç: self.sim.time == 0
+4. Koşula göre yol seç: self.exporter
 
 **Gerçek kaynak:**
 
 ```python
 def change(self,description):
         """Editör değişikliklerini deney çıktısında zamanıyla kaydet."""
+        self.playing=False
         self.sim.revision += 1
         if self.sim.time==0:
             self.sim.baseline=self.sim.snapshot()
@@ -8265,13 +8267,13 @@ def change(self,description):
             self.exporter.log_change(self.sim.time,description,self.sim.snapshot())
 ```
 
-### App.replace_sim — satır 199
+### App.replace_sim — satır 200
 
 Yeni sahne önce tamamen doğrulanır; sonra eski oturum kapatılır.
 
 **Girdiler:** self, scene. self varsa üzerinde işlem yapılan örnektir.
 **Çıktı:** Açık return yok: None. Etki atama, çizim, dosya veya çağrılan işlem üzerinden oluşur.
-**Atanan yerel değerler / durum alanları:** candidate, self.sim, self.playing, self.selected_id, self.mode, self.mode_id, self.route_points, self.inspector.scroll
+**Atanan yerel değerler / durum alanları:** candidate, self.sim, self.playing, self.selected_id, self.tool, self.drag_origin, self.pan_anchor, self.mode, self.mode_id, self.route_points, self.inspector.scroll
 **Bağlandığı işlevler:** Simulation, self.close_recording, self.focus_scene
 **Açık hata yolları:** Bu gövdede açık raise yok; çağrılan işlevlerden hata gelebilir.
 
@@ -8282,11 +8284,14 @@ Yeni sahne önce tamamen doğrulanır; sonra eski oturum kapatılır.
 3. Değeri/alanı oluştur veya güncelle: self.sim = candidate
 4. Değeri/alanı oluştur veya güncelle: self.playing = False
 5. Değeri/alanı oluştur veya güncelle: self.selected_id = None
-6. Değeri/alanı oluştur veya güncelle: self.mode = None
-7. Değeri/alanı oluştur veya güncelle: self.mode_id = None
-8. Değeri/alanı oluştur veya güncelle: self.route_points = []
-9. Değeri/alanı oluştur veya güncelle: self.inspector.scroll = 0
-10. Yan etki/çağrı adımını çalıştır: self.focus_scene()
+6. Değeri/alanı oluştur veya güncelle: self.tool = None
+7. Değeri/alanı oluştur veya güncelle: self.drag_origin = None
+8. Değeri/alanı oluştur veya güncelle: self.pan_anchor = None
+9. Değeri/alanı oluştur veya güncelle: self.mode = None
+10. Değeri/alanı oluştur veya güncelle: self.mode_id = None
+11. Değeri/alanı oluştur veya güncelle: self.route_points = []
+12. Değeri/alanı oluştur veya güncelle: self.inspector.scroll = 0
+13. Yan etki/çağrı adımını çalıştır: self.focus_scene()
 
 **Gerçek kaynak:**
 
@@ -8298,6 +8303,9 @@ def replace_sim(self,scene):
         self.sim=candidate
         self.playing=False
         self.selected_id=None
+        self.tool=None
+        self.drag_origin=None
+        self.pan_anchor=None
         self.mode=None
         self.mode_id=None
         self.route_points=[]
@@ -8305,7 +8313,7 @@ def replace_sim(self,scene):
         self.focus_scene()
 ```
 
-### App.prompt — satır 212
+### App.prompt — satır 216
 
 Dosya, isim veya tohum girişi için deneyi duraklatır ve yazı kutusunu hazırlar.
 
@@ -8330,7 +8338,7 @@ def prompt(self,kind):
         self.input_text=str(ROOT/"scenes"/"deney.json") if kind in ("load","save") else str(self.sim.seed) if kind=="seed" else self.selected.name
 ```
 
-### App.submit — satır 217
+### App.submit — satır 221
 
 Yazı kutusunu amacına göre doğrular; kaydetme, yükleme, tohum veya isim işlemini yapar.
 
@@ -8374,14 +8382,14 @@ def submit(self):
         self.modal=None
 ```
 
-### App.action — satır 240
+### App.action — satır 244
 
 Buton ve kısayolları aynı işlem yoluna yönlendir.
 
 **Girdiler:** self, action. self varsa üzerinde işlem yapılan örnektir.
 **Çıktı:** Açık return yok: None. Etki atama, çizim, dosya veya çağrılan işlem üzerinden oluşur.
 **Atanan yerel değerler / durum alanları:** (name, *args), e, self.playing, interval, baseline, self.speed, self.tab, self.inspector.scroll, self.tool, self.mode, self.route_points, self.show_field, self.show_theory, self.channel, self.filter_selected, values, self.filter_kind, self.selected_id, (self.mode, self.mode_id), e.uav.route_mode, e.uav.route_dir, e.uav.route, e.uav.blocked_reason, mode, e.source.stype, target, (key, delta, low, high), (attribute, channel), values[channel], target.clear_thresholds[channel], value, target.limit
-**Bağlandığı işlevler:** self.begin_recording, self.sim.advance, self.replace_sim, self.message, SPEEDS.index, len, to_scene, self.prompt, lesson_scene, self.focus_scene, values.index, ValueError, operations.delete_entity, self.change, operations.set_route, operations.release_cargo, e.sensor.modes.symmetric_difference_update, invalidate, self.sim.alarm.update, e.source.gas_modes.symmetric_difference_update, setattr, getattr, key.split, round, clamp, min, type, int
+**Bağlandığı işlevler:** self.begin_recording, self.sim.advance, self.replace_sim, self.message, SPEEDS.index, len, to_scene, self.prompt, lesson_scene, self.focus_scene, values.index, ValueError, operations.delete_entity, self.change, operations.set_route, operations.release_cargo, e.sensor.modes.symmetric_difference_update, self.sim.invalidate_sensor, e.source.gas_modes.symmetric_difference_update, setattr, getattr, key.split, round, clamp, min, type, int
 **Açık hata yolları:** ValueError('Önce yükü indir.')
 
 **İşleyiş sırası:**
@@ -8478,9 +8486,7 @@ def action(self,action):
                 mode=args[0]
                 e.sensor.modes.symmetric_difference_update({mode})
                 # Kanal kapatınca geçmiş okumayı geçerli tutma.
-                from .sensors import invalidate
-                invalidate(e.sensor,"WAITING" if e.sensor.modes else "OFF")
-                self.sim.alarm.update(self.sim.entities,self.sim.time)
+                self.sim.invalidate_sensor(e)
                 self.change(name)
             elif name=="gas_mode":
                 e.source.gas_modes.symmetric_difference_update({args[0]})
@@ -8492,9 +8498,7 @@ def action(self,action):
                 target=e.sensor or e.uav
                 setattr(target,args[0],not getattr(target,args[0]))
                 if e.sensor:
-                    from .sensors import invalidate
-                    invalidate(e.sensor,"WAITING" if e.sensor.enabled else "OFF")
-                    self.sim.alarm.update(self.sim.entities,self.sim.time)
+                    self.sim.invalidate_sensor(e)
                 self.change(name)
             elif name=="entity_toggle":
                 setattr(e,args[0],not getattr(e,args[0]))
@@ -8524,8 +8528,8 @@ Bu yerel yardımcı kendisini içeren akışın bir adımını yerine getirir; g
 **Girdiler:** self, pos. self varsa üzerinde işlem yapılan örnektir.
 **Çıktı:** None
 **Atanan yerel değerler / durum alanları:** (wx, wy), (x, y), index, hit, self.mode, e, self.selected_id, self.tool, self.tab, self.inspector.scroll
-**Bağlandığı işlevler:** self.cam.screen_to_world, math.floor, find_entity_at, operations.move_entity, self.change, ValueError, operations.attach, self.route_points.append, operations.add_entity
-**Açık hata yolları:** ValueError('Bir sensör veya kaynak seç.'); ValueError('Aynı durağı arka arkaya ekleme.')
+**Bağlandığı işlevler:** self.cam.screen_to_world, math.floor, find_entity_at, operations.move_entity, self.change, ValueError, operations.attach, len, self.route_points.append, operations.add_entity
+**Açık hata yolları:** ValueError('Bir sensör veya kaynak seç.'); ValueError(f'Rota en fazla {MAX_ROUTE_POINTS} durak içerebilir.'); ValueError('Aynı durağı arka arkaya ekleme.')
 
 **İşleyiş sırası:**
 
@@ -8556,6 +8560,8 @@ def map_click(self,pos):
             self.mode=None
             self.change("attach")
         elif self.mode=="route":
+            if len(self.route_points)>=MAX_ROUTE_POINTS:
+                raise ValueError(f"Rota en fazla {MAX_ROUTE_POINTS} durak içerebilir.")
             if self.route_points and self.route_points[-1]==(x,y):
                 raise ValueError("Aynı durağı arka arkaya ekleme.")
             self.route_points.append((x,y))
@@ -8570,7 +8576,7 @@ def map_click(self,pos):
         self.inspector.scroll=0
 ```
 
-### App.process_event — satır 392
+### App.process_event — satır 394
 
 Gerçek event.pos kullan; aynı karedeki olaylar birbirinin koordinatını almaz.
 
@@ -8664,7 +8670,7 @@ def process_event(self,event):
             self.message(str(exc))
 ```
 
-### App.run — satır 468
+### App.run — satır 470
 
 Bu yerel yardımcı kendisini içeren akışın bir adımını yerine getirir; girdileri, çağırdığı parçalar, değişen alanlar ve dönüş/hata yolları aşağıda kaynakla birlikte gösterilir.
 
@@ -8696,7 +8702,7 @@ def run(self,max_frames=None):
             pygame.quit()
 ```
 
-### main — satır 482
+### main — satır 484
 
 Komut seçeneklerini/başlangıç nesnelerini kurup programın ana akışını başlatır.
 
@@ -10549,24 +10555,32 @@ Satır 5: Gereken isimleri içeri al: from .uav import sync_cargo
 from .uav import sync_cargo
 ```
 
-### add_entity — satır 8
+Satır 6: Gereken isimleri içeri al: from .scene import MAX_ENTITIES, MAX_ROUTE_POINTS, MAX_ENTITY_ID
+
+```python
+from .scene import MAX_ENTITIES, MAX_ROUTE_POINTS, MAX_ENTITY_ID
+```
+
+### add_entity — satır 9
 
 Boş ve sınırlar içindeki kareye benzersiz kimlikle nesne ekle.
 
 **Girdiler:** sim, kind, x, y. self varsa üzerinde işlem yapılan örnektir.
 **Çıktı:** e
 **Atanan yerel değerler / durum alanları:** e, e.sensor, e.source, e.uav, sim.next_id
-**Bağlandığı işlevler:** tile_occupied, ValueError, Entity, SensorProps, SourceProps, UavProps, float, sim.entities.append
-**Açık hata yolları:** ValueError('Bu kare dolu veya harita dışında.')
+**Bağlandığı işlevler:** tile_occupied, ValueError, len, Entity, SensorProps, SourceProps, UavProps, float, sim.entities.append
+**Açık hata yolları:** ValueError('Bu kare dolu veya harita dışında.'); ValueError(f'Sahne en fazla {MAX_ENTITIES} nesne içerebilir.'); ValueError('Yeni nesne kimliği sahne sınırını aşıyor.')
 
 **İşleyiş sırası:**
 
 1. Koşula göre yol seç: not (0 <= x < sim.width and 0 <= y < sim.height) or tile_occupied(sim.entities, x, y)
-2. Değeri/alanı oluştur veya güncelle: e = Entity(sim.next_id, kind, x, y)
-3. Koşula göre yol seç: kind == Kind.SENSOR
-4. Yan etki/çağrı adımını çalıştır: sim.entities.append(e)
-5. Değeri/alanı oluştur veya güncelle: sim.next_id += 1
-6. Çağırana sonucu döndür: e
+2. Koşula göre yol seç: len(sim.entities) >= MAX_ENTITIES
+3. Koşula göre yol seç: sim.next_id > MAX_ENTITY_ID
+4. Değeri/alanı oluştur veya güncelle: e = Entity(sim.next_id, kind, x, y)
+5. Koşula göre yol seç: kind == Kind.SENSOR
+6. Yan etki/çağrı adımını çalıştır: sim.entities.append(e)
+7. Değeri/alanı oluştur veya güncelle: sim.next_id += 1
+8. Çağırana sonucu döndür: e
 
 **Gerçek kaynak:**
 
@@ -10575,6 +10589,10 @@ def add_entity(sim, kind, x, y):
     """Boş ve sınırlar içindeki kareye benzersiz kimlikle nesne ekle."""
     if not (0 <= x < sim.width and 0 <= y < sim.height) or tile_occupied(sim.entities, x, y):
         raise ValueError("Bu kare dolu veya harita dışında.")
+    if len(sim.entities) >= MAX_ENTITIES:
+        raise ValueError(f"Sahne en fazla {MAX_ENTITIES} nesne içerebilir.")
+    if sim.next_id > MAX_ENTITY_ID:
+        raise ValueError("Yeni nesne kimliği sahne sınırını aşıyor.")
     e = Entity(sim.next_id, kind, x, y)
     if kind == Kind.SENSOR:
         e.sensor = SensorProps()
@@ -10587,7 +10605,7 @@ def add_entity(sim, kind, x, y):
     return e
 ```
 
-### move_entity — satır 24
+### move_entity — satır 29
 
 Drone dahil tek nesneyi taşı; yükleri aynı işlemde eşitle.
 
@@ -10623,7 +10641,7 @@ def move_entity(sim, eid, x, y):
         sync_cargo(sim.entities, e)
 ```
 
-### release_cargo — satır 38
+### release_cargo — satır 43
 
 Tüm yükler için önce yer bul; yer yoksa hiçbir bağlantıyı değiştirme.
 
@@ -10667,7 +10685,7 @@ def release_cargo(sim, drone, deleting=False):
     drone.uav.carrying_ids.clear()
 ```
 
-### delete_entity — satır 57
+### delete_entity — satır 62
 
 Sağ tık ve DEL aynı işlemi çağırır; geçersiz yük referansı bırakmaz.
 
@@ -10706,30 +10724,33 @@ def delete_entity(sim, eid):
     sim.history.pop(eid, None)
 ```
 
-### set_route — satır 73
+### set_route — satır 78
 
 Rota türü ve ilk yaklaşım dahil geçerli rotayı atomik olarak kur.
 
 **Girdiler:** sim, drone, points. self varsa üzerinde işlem yapılan örnektir.
 **Çıktı:** Açık return yok: None. Etki atama, çizim, dosya veya çağrılan işlem üzerinden oluşur.
 **Atanan yerel değerler / durum alanları:** obstacles, drone.uav.route, (drone.uav.route_i, drone.uav.route_dir), drone.uav.blocked_reason
-**Bağlandığı işlevler:** any, ValueError, route_is_valid, list
-**Açık hata yolları:** ValueError('Durak harita dışında.'); ValueError('En az iki farklı durak gerekli; rota engelden geçemez.')
+**Bağlandığı işlevler:** len, ValueError, any, route_is_valid, list
+**Açık hata yolları:** ValueError(f'Rota en fazla {MAX_ROUTE_POINTS} durak içerebilir.'); ValueError('Durak harita dışında.'); ValueError('En az iki farklı durak gerekli; rota engelden geçemez.')
 
 **İşleyiş sırası:**
 
-1. Değeri/alanı oluştur veya güncelle: obstacles = {(e.tx, e.ty) for e in sim.entities if e.kind == Kind.OBSTACLE}
-2. Koşula göre yol seç: any((not (0 <= x < sim.width and 0 <= y < sim.height) for x, y in points))
-3. Koşula göre yol seç: not route_is_valid(points, obstacles, drone.uav.route_mode, (drone.uav.x, drone.uav.y))
-4. Değeri/alanı oluştur veya güncelle: drone.uav.route = list(points)
-5. Değeri/alanı oluştur veya güncelle: drone.uav.route_i, drone.uav.route_dir = (0, 1)
-6. Değeri/alanı oluştur veya güncelle: drone.uav.blocked_reason = ''
+1. Koşula göre yol seç: len(points) > MAX_ROUTE_POINTS
+2. Değeri/alanı oluştur veya güncelle: obstacles = {(e.tx, e.ty) for e in sim.entities if e.kind == Kind.OBSTACLE}
+3. Koşula göre yol seç: any((not (0 <= x < sim.width and 0 <= y < sim.height) for x, y in points))
+4. Koşula göre yol seç: not route_is_valid(points, obstacles, drone.uav.route_mode, (drone.uav.x, drone.uav.y))
+5. Değeri/alanı oluştur veya güncelle: drone.uav.route = list(points)
+6. Değeri/alanı oluştur veya güncelle: drone.uav.route_i, drone.uav.route_dir = (0, 1)
+7. Değeri/alanı oluştur veya güncelle: drone.uav.blocked_reason = ''
 
 **Gerçek kaynak:**
 
 ```python
 def set_route(sim, drone, points):
     """Rota türü ve ilk yaklaşım dahil geçerli rotayı atomik olarak kur."""
+    if len(points) > MAX_ROUTE_POINTS:
+        raise ValueError(f"Rota en fazla {MAX_ROUTE_POINTS} durak içerebilir.")
     obstacles = {(e.tx, e.ty) for e in sim.entities if e.kind == Kind.OBSTACLE}
     if any(not (0 <= x < sim.width and 0 <= y < sim.height) for x, y in points):
         raise ValueError("Durak harita dışında.")
@@ -10740,7 +10761,7 @@ def set_route(sim, drone, points):
     drone.uav.blocked_reason = ""
 ```
 
-### attach — satır 85
+### attach — satır 92
 
 Kapasite ve tür kuralını kontrol ederek yükle.
 
@@ -11409,32 +11430,56 @@ Satır 10: Değeri/alanı oluştur veya güncelle: SCHEMA_VERSION = 1
 SCHEMA_VERSION = 1
 ```
 
-Satır 11: Değeri/alanı oluştur veya güncelle: MODEL_VERSION = 'education-2.0'
+Satır 11: Değeri/alanı oluştur veya güncelle: MAX_ENTITIES = 500
+
+```python
+MAX_ENTITIES = 500
+```
+
+Satır 12: Değeri/alanı oluştur veya güncelle: MAX_ROUTE_POINTS = 500
+
+```python
+MAX_ROUTE_POINTS = 500
+```
+
+Satır 13: Değeri/alanı oluştur veya güncelle: MAX_ENTITY_ID = 10 ** 9
+
+```python
+MAX_ENTITY_ID = 10**9
+```
+
+Satır 14: Değeri/alanı oluştur veya güncelle: MAX_SCENE_BYTES = 2000000
+
+```python
+MAX_SCENE_BYTES = 2_000_000
+```
+
+Satır 15: Değeri/alanı oluştur veya güncelle: MODEL_VERSION = 'education-2.0'
 
 ```python
 MODEL_VERSION = "education-2.0"
 ```
 
-Satır 12: Değeri/alanı oluştur veya güncelle: CHANNELS = ('TEMP', 'CO', 'CO2', 'H2')
+Satır 16: Değeri/alanı oluştur veya güncelle: CHANNELS = ('TEMP', 'CO', 'CO2', 'H2')
 
 ```python
 CHANNELS = ("TEMP", "CO", "CO2", "H2")
 ```
 
-Satır 13: Değeri/alanı oluştur veya güncelle: SENSOR_FIELDS = ('range_tiles', 'efficiency', 'battery', 'enabled', 'sample_interval', 'noise_percent', 'offsets', 'thresholds', 'clear_thresholds', 'modes', 'limit', 'max_limit', 'repeat_seconds')
+Satır 17: Değeri/alanı oluştur veya güncelle: SENSOR_FIELDS = ('range_tiles', 'efficiency', 'battery', 'enabled', 'sample_interval', 'noise_percent', 'offsets', 'thresholds', 'clear_thresholds', 'modes', 'limit', 'max_limit', 'repeat_seconds')
 
 ```python
 SENSOR_FIELDS = ("range_tiles", "efficiency", "battery", "enabled", "sample_interval", "noise_percent",
                  "offsets", "thresholds", "clear_thresholds", "modes", "limit", "max_limit", "repeat_seconds")
 ```
 
-Satır 15: Değeri/alanı oluştur veya güncelle: SOURCE_FIELDS = tuple(SourceProps.__dataclass_fields__)
+Satır 19: Değeri/alanı oluştur veya güncelle: SOURCE_FIELDS = tuple(SourceProps.__dataclass_fields__)
 
 ```python
 SOURCE_FIELDS = tuple(SourceProps.__dataclass_fields__)
 ```
 
-### encode — satır 18
+### encode — satır 22
 
 Enum, küme ve koordinatları standart JSON türlerine çevir.
 
@@ -11463,7 +11508,7 @@ def encode(value):
     return value.value if hasattr(value, "value") else value
 ```
 
-### to_scene — satır 28
+### to_scene — satır 32
 
 Canlı okumaları dışarıda bırakıp mevcut düzeni yeni başlangıç olarak kodla.
 
@@ -11499,7 +11544,7 @@ def to_scene(entities, seed=42, width=200, height=200, lesson=0):
                 width=width, height=height, lesson=lesson, entities=items)
 ```
 
-### number — satır 45
+### number — satır 49
 
 Boolean/NaN/sonsuz dahil bozuk sayıları reddet.
 
@@ -11527,7 +11572,7 @@ def number(value, low, high, label, integer=False):
     return value
 ```
 
-### boolean — satır 54
+### boolean — satır 58
 
 Bu yerel yardımcı kendisini içeren akışın bir adımını yerine getirir; girdileri, çağırdığı parçalar, değişen alanlar ve dönüş/hata yolları aşağıda kaynakla birlikte gösterilir.
 
@@ -11551,7 +11596,7 @@ def boolean(value, label):
     return value
 ```
 
-### object_fields — satır 60
+### object_fields — satır 64
 
 Bu yerel yardımcı kendisini içeren akışın bir adımını yerine getirir; girdileri, çağırdığı parçalar, değişen alanlar ve dönüş/hata yolları aşağıda kaynakla birlikte gösterilir.
 
@@ -11575,7 +11620,7 @@ def object_fields(value, allowed, label):
     return value
 ```
 
-### parse_scene — satır 66
+### parse_scene — satır 70
 
 Bütün yapı ve çapraz referanslar geçerliyse yeni nesne listesi döndür.
 
@@ -11583,7 +11628,7 @@ Bütün yapı ve çapraz referanslar geçerliyse yeni nesne listesi döndür.
 **Çıktı:** (entities, seed, width, height, lesson)
 **Atanan yerel değerler / durum alanları:** width, height, seed, lesson, rows, (entities, ids, occupied), eid, kind, x, y, name, e, e.show_effect, e.flammable, e.ignition_temp, e.ignition_seconds, e.carried_by, icon, e.icon_override, expected, p, s, bounds, s.enabled, modes, s.modes, values, e.sensor, s.stype, s.gas_modes, s.temp_celcius, e.source, u, u.speed, u.route_mode, route, u.route, u.carrying_ids, u.show_route, e.uav, index, parent, children
 **Bağlandığı işlevler:** object_fields, type, ValueError, number, data.get, isinstance, len, set, ids.add, Kind, row.get, Entity, boolean, occupied.add, SensorProps, bounds.items, setattr, p.get, getattr, abs, round, list, SensorMode, values.items, any, SourceProps, SourceType, GasMode, UavProps, float, RouteMode, u.route.append, entities.append, index.get
-**Açık hata yolları:** ValueError('Desteklenmeyen sahne/model sürümü.'); ValueError('Sahne en fazla 500 nesne içerebilir.'); ValueError('Tekrarlanan nesne kimliği.'); ValueError('İsim en fazla 80 karakter olmalı.'); ValueError('Bağımsız nesneler aynı karede olamaz.'); ValueError('Bilinmeyen ikon.'); ValueError('Nesne türü ile özellikleri uyuşmuyor.'); ValueError('Örnekleme aralığı 0,05 saniyenin katı olmalı.'); ValueError('Kalan bildirim hakkı maksimumu aşamaz.'); ValueError('Ölçüm kanalları tekrarsız liste olmalı.'); ValueError('Her kanalın ayarı gerekli.'); ValueError('Alarm kapanış eşiği açılış eşiğini aşamaz.'); ValueError('Gaz kanalları tekrarsız liste olmalı.'); ValueError('Rota en fazla 500 durak içerebilir.'); ValueError('Rota noktası [x,y] olmalı.'); ValueError('Rota en az iki farklı durak içermeli.'); ValueError('Yük listesi geçersiz.'); ValueError('Tekrarlanan yük.'); ValueError('Taşıyıcı bağlantısı/konumu geçersiz.'); ValueError('Drone yük bağlantısı geçersiz.'); ValueError('Sensör yalnız taşınabilir.'); ValueError('Eksik veya bozuk sahne alanı.')
+**Açık hata yolları:** ValueError('Desteklenmeyen sahne/model sürümü.'); ValueError(f'Sahne en fazla {MAX_ENTITIES} nesne içerebilir.'); ValueError('Tekrarlanan nesne kimliği.'); ValueError('İsim en fazla 80 karakter olmalı.'); ValueError('Bağımsız nesneler aynı karede olamaz.'); ValueError('Bilinmeyen ikon.'); ValueError('Nesne türü ile özellikleri uyuşmuyor.'); ValueError('Örnekleme aralığı 0,05 saniyenin katı olmalı.'); ValueError('Kalan bildirim hakkı maksimumu aşamaz.'); ValueError('Ölçüm kanalları tekrarsız liste olmalı.'); ValueError('Her kanalın ayarı gerekli.'); ValueError('Alarm kapanış eşiği açılış eşiğini aşamaz.'); ValueError('Gaz kanalları tekrarsız liste olmalı.'); ValueError(f'Rota en fazla {MAX_ROUTE_POINTS} durak içerebilir.'); ValueError('Rota noktası [x,y] olmalı.'); ValueError('Rota en az iki farklı durak içermeli.'); ValueError('Yük listesi geçersiz.'); ValueError('Tekrarlanan yük.'); ValueError('Taşıyıcı bağlantısı/konumu geçersiz.'); ValueError('Drone yük bağlantısı geçersiz.'); ValueError('Sensör yalnız taşınabilir.'); ValueError('Eksik veya bozuk sahne alanı.')
 
 **İşleyiş sırası:**
 
@@ -11603,13 +11648,13 @@ def parse_scene(data):
         seed = number(data["seed"], 0, 2**32 - 1, "Tohum", True)
         lesson = number(data.get("lesson", 0), 0, 6, "Deney", True)
         rows = data["entities"]
-        if not isinstance(rows, list) or len(rows) > 500:
-            raise ValueError("Sahne en fazla 500 nesne içerebilir.")
+        if not isinstance(rows, list) or len(rows) > MAX_ENTITIES:
+            raise ValueError(f"Sahne en fazla {MAX_ENTITIES} nesne içerebilir.")
         entities, ids, occupied = [], set(), set()
         for row in rows:
             object_fields(row, ("id", "kind", "tx", "ty", "name", "show_effect", "carried_by", "icon_override",
                                 "flammable", "ignition_temp", "ignition_seconds", "sensor", "source", "uav"), "Nesne")
-            eid = number(row["id"], 1, 10**9, "Kimlik", True)
+            eid = number(row["id"], 1, MAX_ENTITY_ID, "Kimlik", True)
             if eid in ids:
                 raise ValueError("Tekrarlanan nesne kimliği.")
             ids.add(eid)
@@ -11626,7 +11671,7 @@ def parse_scene(data):
             e.ignition_seconds = number(row.get("ignition_seconds", 3), .1, 300, "Tutuşma süresi")
             e.carried_by = row.get("carried_by")
             if e.carried_by is not None:
-                number(e.carried_by, 1, 10**9, "Taşıyıcı kimliği", True)
+                number(e.carried_by, 1, MAX_ENTITY_ID, "Taşıyıcı kimliği", True)
             elif kind != Kind.UAV and (x, y) in occupied:
                 raise ValueError("Bağımsız nesneler aynı karede olamaz.")
             elif kind != Kind.UAV:
@@ -11684,8 +11729,8 @@ def parse_scene(data):
                 u.speed = number(p.get("speed", 3), 1, 10, "Hız")
                 u.route_mode = RouteMode(p.get("route_mode", "LOOP"))
                 route = p.get("route", [])
-                if not isinstance(route, list) or len(route) > 500:
-                    raise ValueError("Rota en fazla 500 durak içerebilir.")
+                if not isinstance(route, list) or len(route) > MAX_ROUTE_POINTS:
+                    raise ValueError(f"Rota en fazla {MAX_ROUTE_POINTS} durak içerebilir.")
                 u.route = []
                 for point in route:
                     if not isinstance(point, list) or len(point) != 2:
@@ -11697,7 +11742,7 @@ def parse_scene(data):
                 if not isinstance(u.carrying_ids, list) or len(u.carrying_ids) > 3:
                     raise ValueError("Yük listesi geçersiz.")
                 for cid in u.carrying_ids:
-                    number(cid, 1, 10**9, "Yük kimliği", True)
+                    number(cid, 1, MAX_ENTITY_ID, "Yük kimliği", True)
                 if len(set(u.carrying_ids)) != len(u.carrying_ids):
                     raise ValueError("Tekrarlanan yük.")
                 u.show_route = boolean(p.get("show_route", True), "Rota görünürlüğü")
@@ -11720,7 +11765,7 @@ def parse_scene(data):
         raise ValueError("Eksik veya bozuk sahne alanı.") from exc
 ```
 
-### load_scene — satır 194
+### load_scene — satır 198
 
 Bu yerel yardımcı kendisini içeren akışın bir adımını yerine getirir; girdileri, çağırdığı parçalar, değişen alanlar ve dönüş/hata yolları aşağıda kaynakla birlikte gösterilir.
 
@@ -11733,7 +11778,7 @@ Bu yerel yardımcı kendisini içeren akışın bir adımını yerine getirir; g
 **İşleyiş sırası:**
 
 1. Değeri/alanı oluştur veya güncelle: path = Path(path)
-2. Koşula göre yol seç: path.stat().st_size > 2000000
+2. Koşula göre yol seç: path.stat().st_size > MAX_SCENE_BYTES
 3. Değeri/alanı oluştur veya güncelle: data = json.loads(path.read_text(encoding='utf-8'))
 4. Yan etki/çağrı adımını çalıştır: parse_scene(data)
 5. Çağırana sonucu döndür: data
@@ -11743,30 +11788,32 @@ Bu yerel yardımcı kendisini içeren akışın bir adımını yerine getirir; g
 ```python
 def load_scene(path):
     path = Path(path)
-    if path.stat().st_size > 2_000_000:
+    if path.stat().st_size > MAX_SCENE_BYTES:
         raise ValueError("Sahne dosyası 2 MB sınırını aşıyor.")
     data = json.loads(path.read_text(encoding="utf-8"))
     parse_scene(data)
     return data
 ```
 
-### save_scene — satır 203
+### save_scene — satır 207
 
 Önce doğrula; yarım dosya bırakmadan atomik değiştir.
 
 **Girdiler:** path, data. self varsa üzerinde işlem yapılan örnektir.
 **Çıktı:** Açık return yok: None. Etki atama, çizim, dosya veya çağrılan işlem üzerinden oluşur.
-**Atanan yerel değerler / durum alanları:** path, temporary
-**Bağlandığı işlevler:** parse_scene, Path, path.parent.mkdir, tempfile.NamedTemporaryFile, json.dump, f.flush, os.fsync, f.fileno, os.replace, Path(temporary).exists, Path(temporary).unlink
-**Açık hata yolları:** Bu gövdede açık raise yok; çağrılan işlevlerden hata gelebilir.
+**Atanan yerel değerler / durum alanları:** payload, path, temporary
+**Bağlandığı işlevler:** parse_scene, json.dumps(data, ensure_ascii=False, indent=2, allow_nan=False).encode, json.dumps, len, ValueError, Path, path.parent.mkdir, tempfile.NamedTemporaryFile, f.write, f.flush, os.fsync, f.fileno, os.replace, Path(temporary).exists, Path(temporary).unlink
+**Açık hata yolları:** ValueError('Sahne dosyası 2 MB sınırını aşıyor; mevcut dosya değiştirilmedi.')
 
 **İşleyiş sırası:**
 
 1. Yan etki/çağrı adımını çalıştır: parse_scene(data)
-2. Değeri/alanı oluştur veya güncelle: path = Path(path)
-3. Yan etki/çağrı adımını çalıştır: path.parent.mkdir(parents=True, exist_ok=True)
-4. Değeri/alanı oluştur veya güncelle: temporary = None
-5. Başarısız olabilecek işi çalıştır; except yollarında hatayı ele al, finally varsa her çıkışta temizle.
+2. Değeri/alanı oluştur veya güncelle: payload = json.dumps(data, ensure_ascii=False, indent=2, allow_nan=False).encode('utf-8')
+3. Koşula göre yol seç: len(payload) > MAX_SCENE_BYTES
+4. Değeri/alanı oluştur veya güncelle: path = Path(path)
+5. Yan etki/çağrı adımını çalıştır: path.parent.mkdir(parents=True, exist_ok=True)
+6. Değeri/alanı oluştur veya güncelle: temporary = None
+7. Başarısız olabilecek işi çalıştır; except yollarında hatayı ele al, finally varsa her çıkışta temizle.
 
 **Gerçek kaynak:**
 
@@ -11774,13 +11821,16 @@ def load_scene(path):
 def save_scene(path, data):
     """Önce doğrula; yarım dosya bırakmadan atomik değiştir."""
     parse_scene(data)
+    payload = json.dumps(data, ensure_ascii=False, indent=2, allow_nan=False).encode("utf-8")
+    if len(payload) > MAX_SCENE_BYTES:
+        raise ValueError("Sahne dosyası 2 MB sınırını aşıyor; mevcut dosya değiştirilmedi.")
     path = Path(path)
     path.parent.mkdir(parents=True, exist_ok=True)
     temporary = None
     try:
-        with tempfile.NamedTemporaryFile(mode="w", encoding="utf-8", dir=path.parent, delete=False) as f:
+        with tempfile.NamedTemporaryFile(mode="wb", dir=path.parent, delete=False) as f:
             temporary = f.name
-            json.dump(data, f, ensure_ascii=False, indent=2, allow_nan=False)
+            f.write(payload)
             f.flush()
             os.fsync(f.fileno())
         os.replace(temporary, path)
@@ -12032,10 +12082,10 @@ Satır 5: Gereken isimleri içeri al: from .alarm_bridge import AlarmBridge
 from .alarm_bridge import AlarmBridge
 ```
 
-Satır 6: Gereken isimleri içeri al: from .sensors import simulate_tick, VALUE_ATTR
+Satır 6: Gereken isimleri içeri al: from .sensors import simulate_tick, invalidate, VALUE_ATTR
 
 ```python
-from .sensors import simulate_tick, VALUE_ATTR
+from .sensors import simulate_tick, invalidate, VALUE_ATTR
 ```
 
 Satır 7: Gereken isimleri içeri al: from .fire import spread_fire
@@ -12208,14 +12258,73 @@ def start_recording(self, exporter):
             exporter.log_event(event)
 ```
 
-### Simulation.advance — satır 47
+### Simulation._record_sensor — satır 47
+
+Ölçüm veya geçersizlik geçişini aynı anda grafiğe ve dosyaya yaz.
+
+**Girdiler:** self, e. self varsa üzerinde işlem yapılan örnektir.
+**Çıktı:** Açık return yok: None. Etki atama, çizim, dosya veya çağrılan işlem üzerinden oluşur.
+**Atanan yerel değerler / durum alanları:** s
+**Bağlandığı işlevler:** self.history[e.id].append, dict, getattr, VALUE_ATTR.items, sorted, self.alarm.flags.get, set, self.exporter.log_sensor
+**Açık hata yolları:** Bu gövdede açık raise yok; çağrılan işlevlerden hata gelebilir.
+
+**İşleyiş sırası:**
+
+1. Değeri/alanı oluştur veya güncelle: s = e.sensor
+2. Yan etki/çağrı adımını çalıştır: self.history[e.id].append(dict(t=self.time, measured={k: getattr(s, attr) for k, attr in VALUE_ATTR.items()}, theoretical=dict(s.theoretical), battery=s.battery, status=s.status, thresholds=dict(s.thresholds), alarms=sor…
+3. Koşula göre yol seç: self.exporter
+
+**Gerçek kaynak:**
+
+```python
+def _record_sensor(self, e):
+        """Ölçüm veya geçersizlik geçişini aynı anda grafiğe ve dosyaya yaz."""
+        s = e.sensor
+        self.history[e.id].append(dict(t=self.time, measured={k: getattr(s, attr) for k, attr in VALUE_ATTR.items()},
+            theoretical=dict(s.theoretical), battery=s.battery, status=s.status,
+            thresholds=dict(s.thresholds), alarms=sorted(self.alarm.flags.get(e.id, set()))))
+        if self.exporter:
+            self.exporter.log_sensor(self.time, e, self.entities)
+```
+
+### Simulation.invalidate_sensor — satır 56
+
+Editörden kapatılan/değişen sensörün eski okumasını geçersiz kıl.
+
+**Girdiler:** self, e. self varsa üzerinde işlem yapılan örnektir.
+**Çıktı:** Açık return yok: None. Etki atama, çizim, dosya veya çağrılan işlem üzerinden oluşur.
+**Atanan yerel değerler / durum alanları:** s, status
+**Bağlandığı işlevler:** invalidate, self.alarm.update, self._record_sensor
+**Açık hata yolları:** Bu gövdede açık raise yok; çağrılan işlevlerden hata gelebilir.
+
+**İşleyiş sırası:**
+
+1. Değeri/alanı oluştur veya güncelle: s = e.sensor
+2. Değeri/alanı oluştur veya güncelle: status = 'OFF' if not s.enabled or not s.modes else 'EMPTY' if s.battery <= 0 else 'WAITING'
+3. Yan etki/çağrı adımını çalıştır: invalidate(s, status)
+4. Yan etki/çağrı adımını çalıştır: self.alarm.update(self.entities, self.time)
+5. Yan etki/çağrı adımını çalıştır: self._record_sensor(e)
+
+**Gerçek kaynak:**
+
+```python
+def invalidate_sensor(self, e):
+        """Editörden kapatılan/değişen sensörün eski okumasını geçersiz kıl."""
+        s = e.sensor
+        status = "OFF" if not s.enabled or not s.modes else "EMPTY" if s.battery <= 0 else "WAITING"
+        invalidate(s, status)
+        self.alarm.update(self.entities, self.time)
+        self._record_sensor(e)
+```
+
+### Simulation.advance — satır 64
 
 Süre biriktir; hareket, enerji ve yangını aynı sabit sırada yürüt.
 
 **Girdiler:** self, seconds. self varsa üzerinde işlem yapılan örnektir.
 **Çıktı:** count
-**Atanan yerel değerler / durum alanları:** self.pending, count, burning, self.steps, changed, s
-**Bağlandığı işlevler:** ValueError, int, max, range, update_uavs, spread_fire, simulate_tick, self.alarm.update, self.history[e.id].append, dict, getattr, VALUE_ATTR.items, list, self.alarm.flags.get, set, self.exporter.log_sensor, self.alarm._emit
+**Atanan yerel değerler / durum alanları:** self.pending, count, burning, self.steps, changed
+**Bağlandığı işlevler:** ValueError, int, max, range, update_uavs, spread_fire, simulate_tick, self.alarm.update, self._record_sensor, self.alarm._emit
 **Açık hata yolları:** ValueError('İlerleme süresi 0–3600 saniye olmalı.')
 
 **İşleyiş sırası:**
@@ -12242,21 +12351,16 @@ def advance(self, seconds):
             burning = spread_fire(self.entities, STEP)
             self.steps += 1
             changed = simulate_tick(self.entities, STEP, self.rng)
-            if changed:
-                self.alarm.update(self.entities, self.time)
-                for e in changed:
-                    s = e.sensor
-                    self.history[e.id].append(dict(t=self.time, measured={k: getattr(s, attr) for k, attr in VALUE_ATTR.items()},
-                        theoretical=dict(s.theoretical), battery=s.battery, status=s.status,
-                        thresholds=dict(s.thresholds), alarms=list(self.alarm.flags.get(e.id, set()))))
-                    if self.exporter:
-                        self.exporter.log_sensor(self.time, e, self.entities)
+            # Bildirim ve olay saatleri örnekleme aralığını beklemez.
+            self.alarm.update(self.entities, self.time)
+            for e in changed:
+                self._record_sensor(e)
             for e in burning:
                 self.alarm._emit(e, "TEMP", "FIRE", e.source.temp_celcius, "Tutuşma sıcaklığı ve süresi sağlandı")
         return count
 ```
 
-### Simulation.reset — satır 72
+### Simulation.reset — satır 84
 
 Başlangıç sahnesi ve RNG aynı olacak şekilde yeni deney üret.
 
@@ -12823,7 +12927,7 @@ Satır 19: Gereken isimleri içeri al: from iot_sim.fire import spread_fire
 from iot_sim.fire import spread_fire
 ```
 
-Satır 295: Koşula göre yol seç: __name__ == '__main__'
+Satır 352: Koşula göre yol seç: __name__ == '__main__'
 
 ```python
 if __name__=="__main__":
@@ -13183,7 +13287,7 @@ def test_removed_sensor_state_is_pruned(self):
         self.assertFalse(b.slots)
 ```
 
-### DroneTests — satır 124
+### ClockRegressionTests — satır 124
 
 İlgili durum ve davranışları tek sınıf altında toplar. Alanlar, üst sınıflar ve her yöntemin giriş/çıkışı aşağıda ayrı gösterilir.
 
@@ -13195,7 +13299,86 @@ def test_removed_sensor_state_is_pruned(self):
 # Alanlar __init__ içinde atanır.
 ```
 
-### DroneTests.sim — satır 125
+### ClockRegressionTests.test_fire_timestamp_without_sensor_samples — satır 125
+
+Adında belirtilen kullanıcı/model davranışını bağımsız başlangıçla çalıştırır; aşağıdaki assert ifadeleri beklenen sonucu ve hata sınırını tanımlar.
+
+**Girdiler:** self. self varsa üzerinde işlem yapılan örnektir.
+**Çıktı:** Açık return yok: None. Etki atama, çizim, dosya veya çağrılan işlem üzerinden oluşur.
+**Atanan yerel değerler / durum alanları:** source, tree, sim, fire
+**Bağlandığı işlevler:** Entity, SourceProps, Simulation, to_scene, sim.advance, next, self.assertEqual
+**Açık hata yolları:** Bu gövdede açık raise yok; çağrılan işlevlerden hata gelebilir.
+
+**İşleyiş sırası:**
+
+1. Değeri/alanı oluştur veya güncelle: source = Entity(1, Kind.SOURCE, 1, 1, source=SourceProps())
+2. Değeri/alanı oluştur veya güncelle: tree = Entity(2, Kind.OBSTACLE, 2, 1, ignition_seconds=0.15)
+3. Değeri/alanı oluştur veya güncelle: sim = Simulation(to_scene([source, tree]))
+4. Yan etki/çağrı adımını çalıştır: sim.advance(0.15)
+5. Değeri/alanı oluştur veya güncelle: fire = next((ev for ev in sim.alarm.events if ev['kind'] == 'FIRE'))
+6. Yan etki/çağrı adımını çalıştır: self.assertEqual(fire['t'], 0.15)
+
+**Gerçek kaynak:**
+
+```python
+def test_fire_timestamp_without_sensor_samples(self):
+        source=Entity(1,Kind.SOURCE,1,1,source=SourceProps())
+        tree=Entity(2,Kind.OBSTACLE,2,1,ignition_seconds=.15)
+        sim=Simulation(to_scene([source,tree]))
+        sim.advance(.15)
+        fire=next(ev for ev in sim.alarm.events if ev["kind"]=="FIRE")
+        self.assertEqual(fire["t"],.15)
+```
+
+### ClockRegressionTests.test_repeats_follow_clock_between_measurements — satır 133
+
+Adında belirtilen kullanıcı/model davranışını bağımsız başlangıçla çalıştırır; aşağıdaki assert ifadeleri beklenen sonucu ve hata sınırını tanımlar.
+
+**Girdiler:** self. self varsa üzerinde işlem yapılan örnektir.
+**Çıktı:** Açık return yok: None. Etki atama, çizim, dosya veya çağrılan işlem üzerinden oluşur.
+**Atanan yerel değerler / durum alanları:** sensor, sensor.thresholds['TEMP'], sensor.clear_thresholds['TEMP'], sim, repeats
+**Bağlandığı işlevler:** SensorProps, Simulation, to_scene, Entity, sim.advance, self.assertEqual, len
+**Açık hata yolları:** Bu gövdede açık raise yok; çağrılan işlevlerden hata gelebilir.
+
+**İşleyiş sırası:**
+
+1. Değeri/alanı oluştur veya güncelle: sensor = SensorProps(modes={SensorMode.TEMP}, noise_percent=0, sample_interval=10, repeat_seconds=1, limit=5, max_limit=5)
+2. Değeri/alanı oluştur veya güncelle: sensor.thresholds['TEMP'] = sensor.clear_thresholds['TEMP'] = 0
+3. Değeri/alanı oluştur veya güncelle: sim = Simulation(to_scene([Entity(1, Kind.SENSOR, 1, 1, sensor=sensor)]))
+4. Yan etki/çağrı adımını çalıştır: sim.advance(13)
+5. Değeri/alanı oluştur veya güncelle: repeats = [ev['t'] for ev in sim.alarm.notifications if ev['kind'] == 'REPEAT']
+6. Yan etki/çağrı adımını çalıştır: self.assertEqual(repeats, [11, 12, 13])
+7. Yan etki/çağrı adımını çalıştır: self.assertEqual(len(sim.history[1]), 1)
+8. Yan etki/çağrı adımını çalıştır: self.assertEqual(sim.entities[0].sensor.limit, 2)
+
+**Gerçek kaynak:**
+
+```python
+def test_repeats_follow_clock_between_measurements(self):
+        sensor=SensorProps(modes={SensorMode.TEMP},noise_percent=0,sample_interval=10,
+                           repeat_seconds=1,limit=5,max_limit=5)
+        sensor.thresholds["TEMP"]=sensor.clear_thresholds["TEMP"]=0
+        sim=Simulation(to_scene([Entity(1,Kind.SENSOR,1,1,sensor=sensor)]))
+        sim.advance(13)
+        repeats=[ev["t"] for ev in sim.alarm.notifications if ev["kind"]=="REPEAT"]
+        self.assertEqual(repeats,[11,12,13])
+        self.assertEqual(len(sim.history[1]),1)
+        self.assertEqual(sim.entities[0].sensor.limit,2)
+```
+
+### DroneTests — satır 145
+
+İlgili durum ve davranışları tek sınıf altında toplar. Alanlar, üst sınıflar ve her yöntemin giriş/çıkışı aşağıda ayrı gösterilir.
+
+**Sınıf ilişkisi:** unittest.TestCase. Alanlar nesnenin durumudur; yöntemler aşağıda ayrı kayıtlıdır.
+
+**Alanlar ve sınıf düzeyindeki bloklar:**
+
+```python
+# Alanlar __init__ içinde atanır.
+```
+
+### DroneTests.sim — satır 146
 
 Drone testleri için hazır hareketli ölçüm sahnesinden yeni simülasyon kurar.
 
@@ -13216,7 +13399,7 @@ def sim(self):
         return Simulation(lesson_scene(5))
 ```
 
-### DroneTests.test_degenerate_route_returns — satır 128
+### DroneTests.test_degenerate_route_returns — satır 149
 
 Adında belirtilen kullanıcı/model davranışını bağımsız başlangıçla çalıştırır; aşağıdaki assert ifadeleri beklenen sonucu ve hata sınırını tanımlar.
 
@@ -13240,7 +13423,7 @@ def test_degenerate_route_returns(self):
             self.assertTrue(u.uav.blocked_reason)
 ```
 
-### DroneTests.test_loop_closure_and_approach — satır 134
+### DroneTests.test_loop_closure_and_approach — satır 155
 
 Adında belirtilen kullanıcı/model davranışını bağımsız başlangıçla çalıştırır; aşağıdaki assert ifadeleri beklenen sonucu ve hata sınırını tanımlar.
 
@@ -13276,7 +13459,7 @@ def test_loop_closure_and_approach(self):
         self.assertTrue(sim.entities[0].uav.blocked_reason)
 ```
 
-### DroneTests.test_move_and_delete_keep_cargo_consistent — satır 145
+### DroneTests.test_move_and_delete_keep_cargo_consistent — satır 166
 
 Adında belirtilen kullanıcı/model davranışını bağımsız başlangıçla çalıştırır; aşağıdaki assert ifadeleri beklenen sonucu ve hata sınırını tanımlar.
 
@@ -13313,7 +13496,7 @@ def test_move_and_delete_keep_cargo_consistent(self):
         parse_scene(sim.snapshot())
 ```
 
-### DroneTests.test_release_is_atomic_when_full — satır 156
+### DroneTests.test_release_is_atomic_when_full — satır 177
 
 Adında belirtilen kullanıcı/model davranışını bağımsız başlangıçla çalıştırır; aşağıdaki assert ifadeleri beklenen sonucu ve hata sınırını tanımlar.
 
@@ -13346,7 +13529,7 @@ def test_release_is_atomic_when_full(self):
         self.assertEqual(before,sim.snapshot())
 ```
 
-### DroneTests.test_capacity_and_mixed_load — satır 165
+### DroneTests.test_capacity_and_mixed_load — satır 186
 
 Adında belirtilen kullanıcı/model davranışını bağımsız başlangıçla çalıştırır; aşağıdaki assert ifadeleri beklenen sonucu ve hata sınırını tanımlar.
 
@@ -13377,7 +13560,7 @@ def test_capacity_and_mixed_load(self):
         with self.assertRaises(ValueError): operations.attach(sim,drone.id,source.id)
 ```
 
-### TimeAndSceneTests — satır 174
+### SceneLimitTests — satır 195
 
 İlgili durum ve davranışları tek sınıf altında toplar. Alanlar, üst sınıflar ve her yöntemin giriş/çıkışı aşağıda ayrı gösterilir.
 
@@ -13389,7 +13572,138 @@ def test_capacity_and_mixed_load(self):
 # Alanlar __init__ içinde atanır.
 ```
 
-### TimeAndSceneTests.test_lessons_demonstrate_promised_relationships — satır 175
+### SceneLimitTests.test_entity_limit_rejects_edit_without_mutation — satır 196
+
+Adında belirtilen kullanıcı/model davranışını bağımsız başlangıçla çalıştırır; aşağıdaki assert ifadeleri beklenen sonucu ve hata sınırını tanımlar.
+
+**Girdiler:** self. self varsa üzerinde işlem yapılan örnektir.
+**Çıktı:** Açık return yok: None. Etki atama, çizim, dosya veya çağrılan işlem üzerinden oluşur.
+**Atanan yerel değerler / durum alanları:** entities, sim, before
+**Bağlandığı işlevler:** Entity, range, Simulation, to_scene, sim.snapshot, self.assertRaises, operations.add_entity, self.assertEqual
+**Açık hata yolları:** Bu gövdede açık raise yok; çağrılan işlevlerden hata gelebilir.
+
+**İşleyiş sırası:**
+
+1. Değeri/alanı oluştur veya güncelle: entities = [Entity(i + 1, Kind.OBSTACLE, i % 25, i // 25) for i in range(500)]
+2. Değeri/alanı oluştur veya güncelle: sim = Simulation(to_scene(entities))
+3. Değeri/alanı oluştur veya güncelle: before = sim.snapshot()
+4. Kaynak yaşam süresini with bloğuyla sınırla: self.assertRaises(ValueError)
+5. Yan etki/çağrı adımını çalıştır: self.assertEqual(sim.snapshot(), before)
+6. Yan etki/çağrı adımını çalıştır: self.assertEqual(sim.next_id, 501)
+
+**Gerçek kaynak:**
+
+```python
+def test_entity_limit_rejects_edit_without_mutation(self):
+        entities=[Entity(i+1,Kind.OBSTACLE,i%25,i//25) for i in range(500)]
+        sim=Simulation(to_scene(entities))
+        before=sim.snapshot()
+        with self.assertRaises(ValueError): operations.add_entity(sim,Kind.SENSOR,100,100)
+        self.assertEqual(sim.snapshot(),before)
+        self.assertEqual(sim.next_id,501)
+```
+
+### SceneLimitTests.test_entity_id_limit_rejects_edit — satır 204
+
+Adında belirtilen kullanıcı/model davranışını bağımsız başlangıçla çalıştırır; aşağıdaki assert ifadeleri beklenen sonucu ve hata sınırını tanımlar.
+
+**Girdiler:** self. self varsa üzerinde işlem yapılan örnektir.
+**Çıktı:** Açık return yok: None. Etki atama, çizim, dosya veya çağrılan işlem üzerinden oluşur.
+**Atanan yerel değerler / durum alanları:** sim
+**Bağlandığı işlevler:** Simulation, to_scene, Entity, self.assertRaises, operations.add_entity, self.assertEqual, len
+**Açık hata yolları:** Bu gövdede açık raise yok; çağrılan işlevlerden hata gelebilir.
+
+**İşleyiş sırası:**
+
+1. Değeri/alanı oluştur veya güncelle: sim = Simulation(to_scene([Entity(10 ** 9, Kind.OBSTACLE, 0, 0)]))
+2. Kaynak yaşam süresini with bloğuyla sınırla: self.assertRaises(ValueError)
+3. Yan etki/çağrı adımını çalıştır: self.assertEqual(len(sim.entities), 1)
+
+**Gerçek kaynak:**
+
+```python
+def test_entity_id_limit_rejects_edit(self):
+        sim=Simulation(to_scene([Entity(10**9,Kind.OBSTACLE,0,0)]))
+        with self.assertRaises(ValueError): operations.add_entity(sim,Kind.SENSOR,1,0)
+        self.assertEqual(len(sim.entities),1)
+```
+
+### SceneLimitTests.test_route_limit_preserves_old_route — satır 209
+
+Adında belirtilen kullanıcı/model davranışını bağımsız başlangıçla çalıştırır; aşağıdaki assert ifadeleri beklenen sonucu ve hata sınırını tanımlar.
+
+**Girdiler:** self. self varsa üzerinde işlem yapılan örnektir.
+**Çıktı:** Açık return yok: None. Etki atama, çizim, dosya veya çağrılan işlem üzerinden oluşur.
+**Atanan yerel değerler / durum alanları:** sim, drone, old
+**Bağlandığı işlevler:** Simulation, lesson_scene, list, self.assertRaises, operations.set_route, self.assertEqual
+**Açık hata yolları:** Bu gövdede açık raise yok; çağrılan işlevlerden hata gelebilir.
+
+**İşleyiş sırası:**
+
+1. Değeri/alanı oluştur veya güncelle: sim = Simulation(lesson_scene(5))
+2. Değeri/alanı oluştur veya güncelle: drone = sim.entities[0]
+3. Değeri/alanı oluştur veya güncelle: old = list(drone.uav.route)
+4. Kaynak yaşam süresini with bloğuyla sınırla: self.assertRaises(ValueError)
+5. Yan etki/çağrı adımını çalıştır: self.assertEqual(drone.uav.route, old)
+
+**Gerçek kaynak:**
+
+```python
+def test_route_limit_preserves_old_route(self):
+        sim=Simulation(lesson_scene(5))
+        drone=sim.entities[0]
+        old=list(drone.uav.route)
+        with self.assertRaises(ValueError): operations.set_route(sim,drone,[(7,12),(18,12)]*251)
+        self.assertEqual(drone.uav.route,old)
+```
+
+### SceneLimitTests.test_oversized_save_preserves_existing_file — satır 216
+
+Adında belirtilen kullanıcı/model davranışını bağımsız başlangıçla çalıştırır; aşağıdaki assert ifadeleri beklenen sonucu ve hata sınırını tanımlar.
+
+**Girdiler:** self. self varsa üzerinde işlem yapılan örnektir.
+**Çıktı:** Açık return yok: None. Etki atama, çizim, dosya veya çağrılan işlem üzerinden oluşur.
+**Atanan yerel değerler / durum alanları:** large, path, initial, before
+**Bağlandığı işlevler:** to_scene, Entity, UavProps, range, self.assertGreater, len, json.dumps(large, ensure_ascii=False, indent=2).encode, json.dumps, tempfile.TemporaryDirectory, Path, lesson_scene, save_scene, path.read_bytes, self.assertRaises, self.assertEqual, load_scene, list, Path(tmp).iterdir
+**Açık hata yolları:** Bu gövdede açık raise yok; çağrılan işlevlerden hata gelebilir.
+
+**İşleyiş sırası:**
+
+1. Değeri/alanı oluştur veya güncelle: large = to_scene([Entity(i + 1, Kind.UAV, i, 1, uav=UavProps(x=i, y=1, route=[(0, 0), (1, 0)] * 250)) for i in range(100)])
+2. Yan etki/çağrı adımını çalıştır: self.assertGreater(len(json.dumps(large, ensure_ascii=False, indent=2).encode('utf-8')), 2000000)
+3. Kaynak yaşam süresini with bloğuyla sınırla: tempfile.TemporaryDirectory()
+
+**Gerçek kaynak:**
+
+```python
+def test_oversized_save_preserves_existing_file(self):
+        large=to_scene([Entity(i+1,Kind.UAV,i,1,
+                       uav=UavProps(x=i,y=1,route=[(0,0),(1,0)]*250)) for i in range(100)])
+        self.assertGreater(len(json.dumps(large,ensure_ascii=False,indent=2).encode("utf-8")),2_000_000)
+        with tempfile.TemporaryDirectory() as tmp:
+            path=Path(tmp)/"scene.json"
+            initial=lesson_scene(1)
+            save_scene(path,initial)
+            before=path.read_bytes()
+            with self.assertRaises(ValueError): save_scene(path,large)
+            self.assertEqual(path.read_bytes(),before)
+            self.assertEqual(load_scene(path),initial)
+            self.assertEqual(len(list(Path(tmp).iterdir())),1)
+```
+
+### TimeAndSceneTests — satır 231
+
+İlgili durum ve davranışları tek sınıf altında toplar. Alanlar, üst sınıflar ve her yöntemin giriş/çıkışı aşağıda ayrı gösterilir.
+
+**Sınıf ilişkisi:** unittest.TestCase. Alanlar nesnenin durumudur; yöntemler aşağıda ayrı kayıtlıdır.
+
+**Alanlar ve sınıf düzeyindeki bloklar:**
+
+```python
+# Alanlar __init__ içinde atanır.
+```
+
+### TimeAndSceneTests.test_lessons_demonstrate_promised_relationships — satır 232
 
 Adında belirtilen kullanıcı/model davranışını bağımsız başlangıçla çalıştırır; aşağıdaki assert ifadeleri beklenen sonucu ve hata sınırını tanımlar.
 
@@ -13461,7 +13775,7 @@ def test_lessons_demonstrate_promised_relationships(self):
         self.assertEqual(fire.entities[2].kind,Kind.OBSTACLE)
 ```
 
-### TimeAndSceneTests.test_scene_can_capture_drone_crossing_ground_sensor — satır 200
+### TimeAndSceneTests.test_scene_can_capture_drone_crossing_ground_sensor — satır 257
 
 Adında belirtilen kullanıcı/model davranışını bağımsız başlangıçla çalıştırır; aşağıdaki assert ifadeleri beklenen sonucu ve hata sınırını tanımlar.
 
@@ -13488,7 +13802,7 @@ def test_scene_can_capture_drone_crossing_ground_sensor(self):
         parse_scene(scene)
 ```
 
-### TimeAndSceneTests.test_frame_partition_and_seed_reproduce_all_history — satır 206
+### TimeAndSceneTests.test_frame_partition_and_seed_reproduce_all_history — satır 263
 
 Adında belirtilen kullanıcı/model davranışını bağımsız başlangıçla çalıştırır; aşağıdaki assert ifadeleri beklenen sonucu ve hata sınırını tanımlar.
 
@@ -13524,7 +13838,7 @@ def test_frame_partition_and_seed_reproduce_all_history(self):
         self.assertEqual(list(a.history[1]),list(c.history[1]))
 ```
 
-### TimeAndSceneTests.test_all_lessons_roundtrip — satır 216
+### TimeAndSceneTests.test_all_lessons_roundtrip — satır 273
 
 Adında belirtilen kullanıcı/model davranışını bağımsız başlangıçla çalıştırır; aşağıdaki assert ifadeleri beklenen sonucu ve hata sınırını tanımlar.
 
@@ -13552,7 +13866,7 @@ def test_all_lessons_roundtrip(self):
                 sim.advance(10)
 ```
 
-### TimeAndSceneTests.test_reject_corrupt_scene_without_mutation — satır 226
+### TimeAndSceneTests.test_reject_corrupt_scene_without_mutation — satır 283
 
 Adında belirtilen kullanıcı/model davranışını bağımsız başlangıçla çalıştırır; aşağıdaki assert ifadeleri beklenen sonucu ve hata sınırını tanımlar.
 
@@ -13586,7 +13900,7 @@ def test_reject_corrupt_scene_without_mutation(self):
             self.assertEqual(sim.snapshot(),before)
 ```
 
-### TimeAndSceneTests.test_speed_and_interval_partition — satır 239
+### TimeAndSceneTests.test_speed_and_interval_partition — satır 296
 
 Adında belirtilen kullanıcı/model davranışını bağımsız başlangıçla çalıştırır; aşağıdaki assert ifadeleri beklenen sonucu ve hata sınırını tanımlar.
 
@@ -13614,7 +13928,7 @@ def test_speed_and_interval_partition(self):
         self.assertTrue(all(item==references[0] for item in references))
 ```
 
-### ExportAndFireTests — satır 248
+### ExportAndFireTests — satır 305
 
 İlgili durum ve davranışları tek sınıf altında toplar. Alanlar, üst sınıflar ve her yöntemin giriş/çıkışı aşağıda ayrı gösterilir.
 
@@ -13626,7 +13940,7 @@ def test_speed_and_interval_partition(self):
 # Alanlar __init__ içinde atanır.
 ```
 
-### ExportAndFireTests.test_unique_sessions_complete_data_and_metadata — satır 249
+### ExportAndFireTests.test_unique_sessions_complete_data_and_metadata — satır 306
 
 Adında belirtilen kullanıcı/model davranışını bağımsız başlangıçla çalıştırır; aşağıdaki assert ifadeleri beklenen sonucu ve hata sınırını tanımlar.
 
@@ -13659,7 +13973,7 @@ def test_unique_sessions_complete_data_and_metadata(self):
             self.assertTrue(a.closed)
 ```
 
-### ExportAndFireTests.test_invalid_measurements_are_blank — satır 264
+### ExportAndFireTests.test_invalid_measurements_are_blank — satır 321
 
 Adında belirtilen kullanıcı/model davranışını bağımsız başlangıçla çalıştırır; aşağıdaki assert ifadeleri beklenen sonucu ve hata sınırını tanımlar.
 
@@ -13686,7 +14000,7 @@ def test_invalid_measurements_are_blank(self):
             self.assertTrue(all(r["measured"]=="" and r["valid"]=="0" and r["status"]=="EMPTY" for r in rows))
 ```
 
-### ExportAndFireTests.test_exception_closes_files — satır 273
+### ExportAndFireTests.test_exception_closes_files — satır 330
 
 Adında belirtilen kullanıcı/model davranışını bağımsız başlangıçla çalıştırır; aşağıdaki assert ifadeleri beklenen sonucu ve hata sınırını tanımlar.
 
@@ -13711,7 +14025,7 @@ def test_exception_closes_files(self):
             self.assertTrue(exporter.closed)
 ```
 
-### ExportAndFireTests.test_ignition_needs_heat_time_and_flammability — satır 280
+### ExportAndFireTests.test_ignition_needs_heat_time_and_flammability — satır 337
 
 Adında belirtilen kullanıcı/model davranışını bağımsız başlangıçla çalıştırır; aşağıdaki assert ifadeleri beklenen sonucu ve hata sınırını tanımlar.
 
@@ -13742,7 +14056,7 @@ def test_ignition_needs_heat_time_and_flammability(self):
         self.assertEqual(sim.entities[2].kind,Kind.OBSTACLE)
 ```
 
-### ExportAndFireTests.test_cool_source_does_not_ignite — satır 288
+### ExportAndFireTests.test_cool_source_does_not_ignite — satır 345
 
 Adında belirtilen kullanıcı/model davranışını bağımsız başlangıçla çalıştırır; aşağıdaki assert ifadeleri beklenen sonucu ve hata sınırını tanımlar.
 
@@ -13782,55 +14096,61 @@ Satır 1: Modül açıklaması / sabit tanım.
 """Pygame'in gerçek çizim ve olay işleyicisini kontrollü SDL girdileriyle sınar."""
 ```
 
-Satır 2: Gereken isimleri içeri al: import os
+Satır 2: Gereken isimleri içeri al: import csv
+
+```python
+import csv
+```
+
+Satır 3: Gereken isimleri içeri al: import os
 
 ```python
 import os
 ```
 
-Satır 3: Gereken isimleri içeri al: import tempfile
+Satır 4: Gereken isimleri içeri al: import tempfile
 
 ```python
 import tempfile
 ```
 
-Satır 4: Gereken isimleri içeri al: import unittest
+Satır 5: Gereken isimleri içeri al: import unittest
 
 ```python
 import unittest
 ```
 
-Satır 5: Gereken isimleri içeri al: from pathlib import Path
+Satır 6: Gereken isimleri içeri al: from pathlib import Path
 
 ```python
 from pathlib import Path
 ```
 
-Satır 6: Gereken isimleri içeri al: from unittest.mock import patch
+Satır 7: Gereken isimleri içeri al: from unittest.mock import patch
 
 ```python
 from unittest.mock import patch
 ```
 
-Satır 7: Yan etki/çağrı adımını çalıştır: os.environ.setdefault('SDL_VIDEODRIVER', 'dummy')
+Satır 8: Yan etki/çağrı adımını çalıştır: os.environ.setdefault('SDL_VIDEODRIVER', 'dummy')
 
 ```python
 os.environ.setdefault("SDL_VIDEODRIVER","dummy")
 ```
 
-Satır 8: Yan etki/çağrı adımını çalıştır: os.environ.setdefault('SDL_AUDIODRIVER', 'dummy')
+Satır 9: Yan etki/çağrı adımını çalıştır: os.environ.setdefault('SDL_AUDIODRIVER', 'dummy')
 
 ```python
 os.environ.setdefault("SDL_AUDIODRIVER","dummy")
 ```
 
-Satır 9: Yan etki/çağrı adımını çalıştır: os.environ.setdefault('PYGAME_HIDE_SUPPORT_PROMPT', '1')
+Satır 10: Yan etki/çağrı adımını çalıştır: os.environ.setdefault('PYGAME_HIDE_SUPPORT_PROMPT', '1')
 
 ```python
 os.environ.setdefault("PYGAME_HIDE_SUPPORT_PROMPT","1")
 ```
 
-Satır 10: Başarısız olabilecek işi çalıştır; except yollarında hatayı ele al, finally varsa her çıkışta temizle.
+Satır 11: Başarısız olabilecek işi çalıştır; except yollarında hatayı ele al, finally varsa her çıkışta temizle.
 
 ```python
 try:
@@ -13839,38 +14159,38 @@ except ImportError:
     raise unittest.SkipTest("Grafik testleri için requirements.txt kurulmalı.")
 ```
 
-Satır 14: Gereken isimleri içeri al: from iot_sim.app import App
+Satır 15: Gereken isimleri içeri al: from iot_sim.app import App
 
 ```python
 from iot_sim.app import App
 ```
 
-Satır 15: Gereken isimleri içeri al: from iot_sim.lessons import lesson_scene
+Satır 16: Gereken isimleri içeri al: from iot_sim.lessons import lesson_scene
 
 ```python
 from iot_sim.lessons import lesson_scene
 ```
 
-Satır 16: Gereken isimleri içeri al: from iot_sim.scene import to_scene, parse_scene
+Satır 17: Gereken isimleri içeri al: from iot_sim.scene import to_scene, parse_scene
 
 ```python
 from iot_sim.scene import to_scene,parse_scene
 ```
 
-Satır 17: Gereken isimleri içeri al: from iot_sim.models import *
+Satır 18: Gereken isimleri içeri al: from iot_sim.models import *
 
 ```python
 from iot_sim.models import *
 ```
 
-Satır 194: Koşula göre yol seç: __name__ == '__main__'
+Satır 241: Koşula göre yol seç: __name__ == '__main__'
 
 ```python
 if __name__=="__main__":
     unittest.main()
 ```
 
-### UITests — satır 20
+### UITests — satır 21
 
 İlgili durum ve davranışları tek sınıf altında toplar. Alanlar, üst sınıflar ve her yöntemin giriş/çıkışı aşağıda ayrı gösterilir.
 
@@ -13882,7 +14202,7 @@ if __name__=="__main__":
 # Alanlar __init__ içinde atanır.
 ```
 
-### UITests.setUp — satır 21
+### UITests.setUp — satır 22
 
 Her test için bağımsız geçici çıktı alanı ve uygulama örneği hazırlar.
 
@@ -13909,7 +14229,7 @@ def setUp(self):
         self.app.draw()
 ```
 
-### UITests.tearDown — satır 27
+### UITests.tearDown — satır 28
 
 Test kaynaklarını kapatır; geçici sonuç alanını temizler.
 
@@ -13934,7 +14254,7 @@ def tearDown(self):
         self.tmp.cleanup()
 ```
 
-### UITests.click — satır 32
+### UITests.click — satır 33
 
 Kimlikli butonu görünür hale getirip gerçek olay işleyicisine tıklama yollar.
 
@@ -13968,7 +14288,7 @@ def click(self,key):
         self.app.process_event(pygame.event.Event(pygame.MOUSEBUTTONUP,button=1,pos=pos))
 ```
 
-### UITests.mapclick — satır 43
+### UITests.mapclick — satır 44
 
 Dünya koordinatını piksele çevirip harita fare olayını üretir.
 
@@ -13995,7 +14315,7 @@ def mapclick(self,x,y,button=1):
         self.app.process_event(pygame.event.Event(pygame.MOUSEBUTTONUP,button=button,pos=pos))
 ```
 
-### UITests.key — satır 49
+### UITests.key — satır 50
 
 Gerçek olay işleyicisine kontrollü tuş olayı yollar.
 
@@ -14016,7 +14336,7 @@ def key(self,key):
         self.app.process_event(pygame.event.Event(pygame.KEYDOWN,key=key,unicode="",mod=0))
 ```
 
-### UITests.test_all_lessons_graphs_and_resizing — satır 52
+### UITests.test_all_lessons_graphs_and_resizing — satır 53
 
 Adında belirtilen kullanıcı/model davranışını bağımsız başlangıçla çalıştırır; aşağıdaki assert ifadeleri beklenen sonucu ve hata sınırını tanımlar.
 
@@ -14049,7 +14369,7 @@ def test_all_lessons_graphs_and_resizing(self):
             self.assertTrue(self.app.screen.get_rect().contains(self.app.graph_rect))
 ```
 
-### UITests.test_editor_and_actual_event_coordinates — satır 67
+### UITests.test_editor_and_actual_event_coordinates — satır 68
 
 Adında belirtilen kullanıcı/model davranışını bağımsız başlangıçla çalıştırır; aşağıdaki assert ifadeleri beklenen sonucu ve hata sınırını tanımlar.
 
@@ -14098,7 +14418,7 @@ def test_editor_and_actual_event_coordinates(self):
         self.assertFalse(self.app.sim.entities)
 ```
 
-### UITests.test_right_click_and_del_both_release — satır 84
+### UITests.test_right_click_and_del_both_release — satır 85
 
 Adında belirtilen kullanıcı/model davranışını bağımsız başlangıçla çalıştırır; aşağıdaki assert ifadeleri beklenen sonucu ve hata sınırını tanımlar.
 
@@ -14130,7 +14450,7 @@ def test_right_click_and_del_both_release(self):
             parse_scene(self.app.sim.snapshot())
 ```
 
-### UITests.test_drag_drop_sensor_to_drone_panel — satır 98
+### UITests.test_drag_drop_sensor_to_drone_panel — satır 99
 
 Adında belirtilen kullanıcı/model davranışını bağımsız başlangıçla çalıştırır; aşağıdaki assert ifadeleri beklenen sonucu ve hata sınırını tanımlar.
 
@@ -14170,7 +14490,7 @@ def test_drag_drop_sensor_to_drone_panel(self):
         self.assertEqual(self.app.sim.entities[0].uav.carrying_ids,[2])
 ```
 
-### UITests.test_route_keyboard_and_cancel — satır 111
+### UITests.test_route_keyboard_and_cancel — satır 112
 
 Adında belirtilen kullanıcı/model davranışını bağımsız başlangıçla çalıştırır; aşağıdaki assert ifadeleri beklenen sonucu ve hata sınırını tanımlar.
 
@@ -14215,7 +14535,7 @@ def test_route_keyboard_and_cancel(self):
         self.assertEqual(self.app.sim.entities[0].uav.route,[(7,10),(9,10)])
 ```
 
-### UITests.test_save_load_seed_invalid_load_preserves_scene — satır 126
+### UITests.test_save_load_seed_invalid_load_preserves_scene — satır 127
 
 Adında belirtilen kullanıcı/model davranışını bağımsız başlangıçla çalıştırır; aşağıdaki assert ifadeleri beklenen sonucu ve hata sınırını tanımlar.
 
@@ -14276,7 +14596,7 @@ def test_save_load_seed_invalid_load_preserves_scene(self):
         self.assertEqual(self.app.sim.seed,123)
 ```
 
-### UITests.test_panel_controls_and_filters — satır 149
+### UITests.test_panel_controls_and_filters — satır 150
 
 Adında belirtilen kullanıcı/model davranışını bağımsız başlangıçla çalıştırır; aşağıdaki assert ifadeleri beklenen sonucu ve hata sınırını tanımlar.
 
@@ -14323,7 +14643,7 @@ def test_panel_controls_and_filters(self):
         self.app.draw()
 ```
 
-### UITests.test_source_fire_and_alarm_controls — satır 165
+### UITests.test_source_fire_and_alarm_controls — satır 166
 
 Adında belirtilen kullanıcı/model davranışını bağımsız başlangıçla çalıştırır; aşağıdaki assert ifadeleri beklenen sonucu ve hata sınırını tanımlar.
 
@@ -14383,7 +14703,158 @@ def test_source_fire_and_alarm_controls(self):
         self.assertEqual(self.app.selected.ignition_temp,130)
 ```
 
-### UITests.test_exception_path_closes_exporter — satır 186
+### UITests.test_route_editor_keeps_valid_draft_at_limit — satır 187
+
+Adında belirtilen kullanıcı/model davranışını bağımsız başlangıçla çalıştırır; aşağıdaki assert ifadeleri beklenen sonucu ve hata sınırını tanımlar.
+
+**Girdiler:** self. self varsa üzerinde işlem yapılan örnektir.
+**Çıktı:** Açık return yok: None. Etki atama, çizim, dosya veya çağrılan işlem üzerinden oluşur.
+**Atanan yerel değerler / durum alanları:** self.app.selected_id, self.app.route_points, before
+**Bağlandığı işlevler:** self.app.replace_sim, lesson_scene, self.app.action, list, self.mapclick, self.assertEqual, self.assertIn, self.key, self.assertIsNone, parse_scene, self.app.sim.snapshot
+**Açık hata yolları:** Bu gövdede açık raise yok; çağrılan işlevlerden hata gelebilir.
+
+**İşleyiş sırası:**
+
+1. Yan etki/çağrı adımını çalıştır: self.app.replace_sim(lesson_scene(5))
+2. Değeri/alanı oluştur veya güncelle: self.app.selected_id = 1
+3. Yan etki/çağrı adımını çalıştır: self.app.action(('route',))
+4. Değeri/alanı oluştur veya güncelle: self.app.route_points = [(7, 12), (18, 12)] * 250
+5. Değeri/alanı oluştur veya güncelle: before = list(self.app.route_points)
+6. Yan etki/çağrı adımını çalıştır: self.mapclick(9, 13)
+7. Yan etki/çağrı adımını çalıştır: self.assertEqual(self.app.route_points, before)
+8. Yan etki/çağrı adımını çalıştır: self.assertIn('500', self.app.toast)
+9. Yan etki/çağrı adımını çalıştır: self.key(pygame.K_k)
+10. Yan etki/çağrı adımını çalıştır: self.assertIsNone(self.app.mode)
+11. Yan etki/çağrı adımını çalıştır: self.assertEqual(self.app.selected.uav.route, before)
+12. Yan etki/çağrı adımını çalıştır: parse_scene(self.app.sim.snapshot())
+
+**Gerçek kaynak:**
+
+```python
+def test_route_editor_keeps_valid_draft_at_limit(self):
+        self.app.replace_sim(lesson_scene(5))
+        self.app.selected_id=1
+        self.app.action(("route",))
+        self.app.route_points=[(7,12),(18,12)]*250
+        before=list(self.app.route_points)
+        self.mapclick(9,13)
+        self.assertEqual(self.app.route_points,before)
+        self.assertIn("500",self.app.toast)
+        self.key(pygame.K_k)
+        self.assertIsNone(self.app.mode)
+        self.assertEqual(self.app.selected.uav.route,before)
+        parse_scene(self.app.sim.snapshot())
+```
+
+### UITests.test_toggle_records_invalid_point_and_csv_gap — satır 201
+
+Adında belirtilen kullanıcı/model davranışını bağımsız başlangıçla çalıştırır; aşağıdaki assert ifadeleri beklenen sonucu ve hata sınırını tanımlar.
+
+**Girdiler:** self. self varsa üzerinde işlem yapılan örnektir.
+**Çıktı:** Açık return yok: None. Etki atama, çizim, dosya veya çağrılan işlem üzerinden oluşur.
+**Atanan yerel değerler / durum alanları:** self.app.selected_id, row, rows
+**Bağlandığı işlevler:** self.app.action, self.app.sim.advance, self.assertEqual, self.app.exporter.flush, self.app.exporter.csv_path.open, csv.DictReader, float, self.assertIsNotNone
+**Açık hata yolları:** Bu gövdede açık raise yok; çağrılan işlevlerden hata gelebilir.
+
+**İşleyiş sırası:**
+
+1. Değeri/alanı oluştur veya güncelle: self.app.selected_id = 1
+2. Yan etki/çağrı adımını çalıştır: self.app.action(('play',))
+3. Yan etki/çağrı adımını çalıştır: self.app.sim.advance(1.25)
+4. Yan etki/çağrı adımını çalıştır: self.app.action(('toggle', 'enabled'))
+5. Değeri/alanı oluştur veya güncelle: row = self.app.sim.history[1][-1]
+6. Yan etki/çağrı adımını çalıştır: self.assertEqual((row['t'], row['status'], row['measured']['TEMP']), (1.25, 'OFF', None))
+7. Yan etki/çağrı adımını çalıştır: self.app.exporter.flush()
+8. Kaynak yaşam süresini with bloğuyla sınırla: self.app.exporter.csv_path.open()
+9. Yan etki/çağrı adımını çalıştır: self.assertEqual((float(rows[-1]['t']), rows[-1]['status'], rows[-1]['measured']), (1.25, 'OFF', ''))
+10. Yan etki/çağrı adımını çalıştır: self.app.action(('toggle', 'enabled'))
+11. Yan etki/çağrı adımını çalıştır: self.assertEqual(self.app.sim.history[1][-1]['status'], 'WAITING')
+12. Yan etki/çağrı adımını çalıştır: self.app.sim.advance(1)
+13. Yan etki/çağrı adımını çalıştır: self.assertIsNotNone(self.app.sim.history[1][-1]['measured']['TEMP'])
+
+**Gerçek kaynak:**
+
+```python
+def test_toggle_records_invalid_point_and_csv_gap(self):
+        self.app.selected_id=1
+        self.app.action(("play",))
+        self.app.sim.advance(1.25)
+        self.app.action(("toggle","enabled"))
+        row=self.app.sim.history[1][-1]
+        self.assertEqual((row["t"],row["status"],row["measured"]["TEMP"]),(1.25,"OFF",None))
+        self.app.exporter.flush()
+        with self.app.exporter.csv_path.open() as f:
+            rows=[r for r in csv.DictReader(f) if r["sensor_id"]=="1" and r["channel"]=="TEMP"]
+        self.assertEqual((float(rows[-1]["t"]),rows[-1]["status"],rows[-1]["measured"]),(1.25,"OFF",""))
+        self.app.action(("toggle","enabled"))
+        self.assertEqual(self.app.sim.history[1][-1]["status"],"WAITING")
+        self.app.sim.advance(1)
+        self.assertIsNotNone(self.app.sim.history[1][-1]["measured"]["TEMP"])
+```
+
+### UITests.test_map_edit_pauses_running_experiment — satır 217
+
+Adında belirtilen kullanıcı/model davranışını bağımsız başlangıçla çalıştırır; aşağıdaki assert ifadeleri beklenen sonucu ve hata sınırını tanımlar.
+
+**Girdiler:** self. self varsa üzerinde işlem yapılan örnektir.
+**Çıktı:** Açık return yok: None. Etki atama, çizim, dosya veya çağrılan işlem üzerinden oluşur.
+**Atanan yerel değerler / durum alanları:** Doğrudan atama yok.
+**Bağlandığı işlevler:** self.app.action, self.mapclick, self.assertFalse, self.assertEqual
+**Açık hata yolları:** Bu gövdede açık raise yok; çağrılan işlevlerden hata gelebilir.
+
+**İşleyiş sırası:**
+
+1. Yan etki/çağrı adımını çalıştır: self.app.action(('play',))
+2. Yan etki/çağrı adımını çalıştır: self.app.action(('tool', Kind.SENSOR))
+3. Yan etki/çağrı adımını çalıştır: self.mapclick(8, 8)
+4. Yan etki/çağrı adımını çalıştır: self.assertFalse(self.app.playing)
+5. Yan etki/çağrı adımını çalıştır: self.assertEqual((self.app.selected.tx, self.app.selected.ty), (8, 8))
+
+**Gerçek kaynak:**
+
+```python
+def test_map_edit_pauses_running_experiment(self):
+        self.app.action(("play",))
+        self.app.action(("tool",Kind.SENSOR))
+        self.mapclick(8,8)
+        self.assertFalse(self.app.playing)
+        self.assertEqual((self.app.selected.tx,self.app.selected.ty),(8,8))
+```
+
+### UITests.test_scene_replacement_clears_pending_drag_and_tool — satır 224
+
+Adında belirtilen kullanıcı/model davranışını bağımsız başlangıçla çalıştırır; aşağıdaki assert ifadeleri beklenen sonucu ve hata sınırını tanımlar.
+
+**Girdiler:** self. self varsa üzerinde işlem yapılan örnektir.
+**Çıktı:** Açık return yok: None. Etki atama, çizim, dosya veya çağrılan işlem üzerinden oluşur.
+**Atanan yerel değerler / durum alanları:** self.app.drag_origin, self.app.pan_anchor, self.app.tool
+**Bağlandığı işlevler:** self.app.replace_sim, lesson_scene, self.assertIsNone
+**Açık hata yolları:** Bu gövdede açık raise yok; çağrılan işlevlerden hata gelebilir.
+
+**İşleyiş sırası:**
+
+1. Değeri/alanı oluştur veya güncelle: self.app.drag_origin = (1, 2, (100, 100))
+2. Değeri/alanı oluştur veya güncelle: self.app.pan_anchor = (50, 50)
+3. Değeri/alanı oluştur veya güncelle: self.app.tool = Kind.SENSOR
+4. Yan etki/çağrı adımını çalıştır: self.app.replace_sim(lesson_scene(3))
+5. Yan etki/çağrı adımını çalıştır: self.assertIsNone(self.app.drag_origin)
+6. Yan etki/çağrı adımını çalıştır: self.assertIsNone(self.app.pan_anchor)
+7. Yan etki/çağrı adımını çalıştır: self.assertIsNone(self.app.tool)
+
+**Gerçek kaynak:**
+
+```python
+def test_scene_replacement_clears_pending_drag_and_tool(self):
+        self.app.drag_origin=(1,2,(100,100))
+        self.app.pan_anchor=(50,50)
+        self.app.tool=Kind.SENSOR
+        self.app.replace_sim(lesson_scene(3))
+        self.assertIsNone(self.app.drag_origin)
+        self.assertIsNone(self.app.pan_anchor)
+        self.assertIsNone(self.app.tool)
+```
+
+### UITests.test_exception_path_closes_exporter — satır 233
 
 Adında belirtilen kullanıcı/model davranışını bağımsız başlangıçla çalıştırır; aşağıdaki assert ifadeleri beklenen sonucu ve hata sınırını tanımlar.
 
@@ -15257,5 +15728,5 @@ def main():
 
 ## Yenileme ve kapsam kontrolü
 
-Bu üretimde 32 Python dosyası ve 340 sınıf/fonksiyon konumu kapsanır.
+Bu üretimde 32 Python dosyası ve 354 sınıf/fonksiyon konumu kapsanır.
 Kaynak değişince python -B tools/build_guide.py çalıştır; ardından --check ile aynı kaynak kesitlerinin ve hashlerin korunduğunu doğrula.

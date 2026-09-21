@@ -2,7 +2,7 @@
 
 **Durum: Kullanıcı 21 Eylül 2026 tarihinde P01–P09 paketinin tamamını onayladı ve uygulamayı başlattı. Paketin uygulaması ve yerel doğrulaması tamamlandı; sonuçlar bölüm 8 ve docs/DOGRULAMA.md içinde.**
 
-Bu dosya inceleme ve ortak karar geçmişini korur. **Bölüm 2–5 başlangıç commitine ait tarihsel incelemedir; güncel uygulama veya son test sonucu olarak okunmamalıdır.** Bölüm 6–7 onaylanan paketi, bölüm 8 teslimi anlatır. Uygulama yetkisi kullanıcının açık onayından gelir. İlk teslimden sonraki kullanıcı talimatıyla yerel commit yetkisi verildi; push yetkisi verilmedi.
+Bu dosya inceleme ve ortak karar geçmişini korur. **Bölüm 2–5 başlangıç commitine ait tarihsel incelemedir; güncel uygulama veya son test sonucu olarak okunmamalıdır.** Bölüm 6–7 onaylanan paketi, bölüm 8 teslimi anlatır. Uygulama yetkisi kullanıcının açık onayından gelir. İlk teslimden sonra yerel commit yetkisi verildi. Sonraki “Başka geliştirmeler varsa uygula, sonra pushla.” talimatı ek düzeltmeleri ve origin/main dalına push işlemini de kapsar.
 
 ## 1. İncelenen sürüm ve yetkilendirilmiş kapsam
 
@@ -335,7 +335,7 @@ Aşağıdaki sıra, paket onayından önce hazırlanan iş ayrımıdır. Uygulam
 5. Ayrı kabul edilen model/görsel/deney özellikleri; anlamlı küçük gruplar halinde.
 6. Son davranışla eşleşen kapsamlı rehber ve README.
 
-Uygulama kullanıcı tarafından başlatıldı. İlk teslimin ardından yerel commit talep edildi; ayrım bölüm 9 içindedir. Push yetkisi verilmedi; model/görev ayarı bu dosyayla değiştirilmez.
+Uygulama kullanıcı tarafından başlatıldı. İlk teslimin ardından yerel commit talep edildi; ayrım bölüm 9 içindedir. Güncel ek geliştirme ve push yetkisi bölüm 10 içindedir; model/görev ayarı bu dosyayla değiştirilmez.
 
 
 ## 8. Uygulama teslimi — 21 Eylül 2026
@@ -375,6 +375,19 @@ Kullanıcı geliştirme değişikliklerinin geriye dönük anlamlı commitlere a
 
 1. `f507ae5` — `feat: build the educational IoT experiment environment`: ortak model, hesaplama ve arayüz birlikte değiştiği için çalışır uygulama tek committe tutuldu; bağımlılık ve üretilen dosya kuralları dahil.
 2. `b01c510` — `test: cover simulation rules and Pygame workflows`: 34 davranış/arayüz testi ile altı deney ve performans doğrulama aracı.
-3. `docs: document experiments, architecture and verification`: çalışma talimatları, README, bu karar kaydı, Türkçe rehber, kaynak eki/üreticisi ve gerçek doğrulama çıktıları.
+3. `6a4b104` — `docs: document experiments, architecture and verification`: çalışma talimatları, README, bu karar kaydı, Türkçe rehber, kaynak eki/üreticisi ve gerçek doğrulama çıktıları.
 
-Commit ayrımı sırasında commitlenmiş uygulama üzerinde 34 test SDL dummy sürücüsüyle yeniden geçti (1,539 s). Rehber/kaynak eşleşmesi de kontrol edildi. Önceki X11 ölçümleri yeniden yapılmış gibi sunulmadı. Tüm kayıtlar yereldir; GitHub'a push yapılmadı.
+Commit ayrımı sırasında commitlenmiş uygulama üzerinde 34 test SDL dummy sürücüsüyle yeniden geçti (1,539 s). Rehber/kaynak eşleşmesi de kontrol edildi. Önceki X11 ölçümleri yeniden yapılmış gibi sunulmadı. Bu aşamada tüm kayıtlar yereldi ve GitHub'a push yapılmamıştı.
+
+
+## 10. Ek sağlamlaştırma ve yayın yetkisi
+
+Kullanıcı “Başka geliştirmeler varsa uygula, sonra pushla.” diyerek ek inceleme/düzeltme ve normal push yetkisi verdi. Mevcut öğretici ortamın davranışı incelendi; yeni platform veya donanım kapsamı eklenmedi. Uzak adres `https://github.com/MrSqy/IoT-sensor-grid-simulator.git`, hedef `origin/main` olarak doğrulandı.
+
+- `bbcb74a` — Olay saati ve editör durumu: sensör bulunmayan sahnede 0,15 saniyede tutuşan ağacın olayı yanlışlıkla 0 zamanıyla yazılıyordu. On saniyede bir ölçen cihazda bir saniyelik tekrar bildirimi de yeni ölçümü bekliyordu. Saat her model adımında yenileniyor. Sensör kapatma grafiğe/CSV'ye aynı anda geçersiz nokta yazıyor; harita düzenlemesi duraklatıyor ve sahne değişimi yarım sürükleme/araç durumunu temizliyor.
+- `6ae653e` — Sahne sınırları: düzenleyicide eklenebilen 501. nesne veya 501. durak sonra kaydedilemiyordu. Ayrıca yazıcı, yükleyicinin 2 MB sınırını aşan dosya oluşturabiliyordu. Ortak sınırlar işlemden önce denetleniyor; reddedilen işlem mevcut rota/sahne/dosyayı koruyor. 500 duraklı geçerli taslak kaydedilebiliyor.
+- Dokümantasyon ve kanıt: ana rehber, kaynak eki ve gerçek X11 çalışma raporu son kaynakla yenilendi. Bu düzeltmeler sahne/model şemasını değiştirmiyor.
+
+İlk dokuz regresyon düzeltme öncesinde başarısız sonuçla açıkları kanıtladı; sonrasında rota editörünün sınır davranışı için bir test daha eklendi. Toplam **44 test** SDL dummy ve X11/Xvfb üzerinde geçti (31 model/dosya, 13 arayüz); son X11 koşusu 4,264 s sürdü. Altı deney tekrar 10'ar simülasyon saniyesi çalıştı. Son performans ve kaynak hashleri [doğrulama raporu](docs/DOGRULAMA.md) ve `docs/runtime.json` içindedir. Bu aşama gerçek insan kullanımı veya Windows/macOS doğrulaması değildir.
+
+Yayın yöntemi: mevcut commit geçmişi korunarak, doğrulanmış main dalını normal `git push origin main` ile gönderme. Force push, tarih değiştirme ve başka projelere kod aktarımı kapsamda değildir.

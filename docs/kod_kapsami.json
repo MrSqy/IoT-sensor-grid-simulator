@@ -6,7 +6,7 @@
     "iot_sim/IoT.py": "1610150789286866e6bdc871ba83c351a039b58107ade57a0920f8c55637311e",
     "iot_sim/__init__.py": "037f5aada316ca4e4becdd02cf4536e9a312f4501395b8ac189677c08a9577f0",
     "iot_sim/alarm_bridge.py": "c9c34a5e6559887c8908d62cc77746f8eee8070585a6ed0ed7ba76c757f9f646",
-    "iot_sim/app.py": "724b573d30513229aa06475a3d8b044c513c08032ad46940a1086a9f7394bcec",
+    "iot_sim/app.py": "00ee58d6a0682de76c0d8ec5116f05aec26c3d8d44ac7cb4bc73db322208acf3",
     "iot_sim/assets.py": "a9d5d69eb3680f8f8ab738ad6c5ff53ae88cebbfc3e6aadd13abe88d0a42a043",
     "iot_sim/camera.py": "ee31c120d400435509c35c288f24b153836ff5710a3eeb5ccf82260f83562100",
     "iot_sim/cargo.py": "851cfdb45c3088681550aebafdb65b7dd75cfff4acb4f80114bea7c35317a7ad",
@@ -18,18 +18,18 @@
     "iot_sim/graphs.py": "26ba54e70e72bde012538d915828f1c7dc6598e6537c48228e5dfaece134b73d",
     "iot_sim/lessons.py": "98df01f109a513961edf06013986d6b451f9e17fac66fb0903c2cded404a4fe3",
     "iot_sim/models.py": "fbaf72e8293f9f6aaf3b25d02f41f1a359a898785d647cf298a4e38a1dfb4b78",
-    "iot_sim/operations.py": "eb6d2efc923ea5c5c65ad57d5e285614885475f360bbeea3d5d2624293619a71",
+    "iot_sim/operations.py": "df08b248b8c6c0b6b7d1c3a2c868ae1fb860fab548ad5f77e84ed2ac88d8eb2c",
     "iot_sim/panel.py": "0de55680adfa5665384c27f739aa318be83a0a630f3a7a325ace98670cdf3499",
     "iot_sim/render.py": "556c6740d766d2c615597725c82cbab9448407886d8d2478a41bbef496d8ee15",
-    "iot_sim/scene.py": "a5ad84ad9ddd547858392a5ce2c7016ab4ef96aa5bbcfc53ebc708688b87fe7f",
+    "iot_sim/scene.py": "23355cb90a0bb843dad1fe9fc5012900dec4edcf0983cb14c11c1b0707889642",
     "iot_sim/sensors.py": "f4eb81b41eb4f2d511d1658e4d1c4294371d3b1059615097c6b1e7c845d5bb2e",
-    "iot_sim/simulation.py": "33e3924ca76467de6beb77b5c22af3237d77edc8b2cadedd736f41e8d7abcbca",
+    "iot_sim/simulation.py": "00a4f785f08ab6e4dbb52c28af7e8735bb8864caeee912daf14e8f0d1aa97374",
     "iot_sim/uav.py": "6a54ae8486d0a5db30ca4cc7855599d25ab1dc8d05e831260ca67aba73b25cc6",
     "iot_sim/ui_widgets.py": "2e25a52b0f0abdce17a937dd87c22dd02f08bc3ae31e96734ec0fe16f88a4154",
     "iot_sim/viz.py": "b149d103f9f40289da28dbb0cca22764bd83a2104df75c4d01d69b3dc6145bb5",
     "main.py": "f73ad4a5268a0622890964ecb9064fdecc85c06bdaf281f3cb9f3d95d05ffe9d",
-    "tests/test_simulation.py": "7c2070984cb111a7462ecbb1348db941972e80a031c20db27e12de18d03b3f93",
-    "tests/test_ui.py": "ceabc97c92d49fba7ee0054fabafdffb5b4dd17c44d68f3b864275df9915ad6d",
+    "tests/test_simulation.py": "2a148d4814af1c0eb2ec60443852f161ba9c251e819cc14cced4881d8334121f",
+    "tests/test_ui.py": "e63e0693d820e7062c99bfccdfbaade938102c82a5982d03a77fe0c838ad99ad",
     "tools/build_guide.py": "900bfba38380c272aa264768d3d7700410a9d89e5a65cb821928ff2e747e4b6d",
     "tools/verify_runtime.py": "bcfcd414e6b5a474a4b506260fe5c19cfa7cf2c82470316ed88715d58847952e"
   },
@@ -1249,7 +1249,7 @@
       "file": "iot_sim/app.py",
       "name": "App",
       "line": 23,
-      "end": 479,
+      "end": 481,
       "kind": "ClassDef"
     },
     {
@@ -1319,34 +1319,34 @@
       "file": "iot_sim/app.py",
       "name": "App.change",
       "line": 191,
-      "end": 197,
+      "end": 198,
       "kind": "FunctionDef"
     },
     {
       "file": "iot_sim/app.py",
       "name": "App.replace_sim",
-      "line": 199,
-      "end": 210,
+      "line": 200,
+      "end": 214,
       "kind": "FunctionDef"
     },
     {
       "file": "iot_sim/app.py",
       "name": "App.prompt",
-      "line": 212,
-      "end": 215,
+      "line": 216,
+      "end": 219,
       "kind": "FunctionDef"
     },
     {
       "file": "iot_sim/app.py",
       "name": "App.submit",
-      "line": 217,
-      "end": 238,
+      "line": 221,
+      "end": 242,
       "kind": "FunctionDef"
     },
     {
       "file": "iot_sim/app.py",
       "name": "App.action",
-      "line": 240,
+      "line": 244,
       "end": 361,
       "kind": "FunctionDef"
     },
@@ -1354,28 +1354,28 @@
       "file": "iot_sim/app.py",
       "name": "App.map_click",
       "line": 363,
-      "end": 390,
+      "end": 392,
       "kind": "FunctionDef"
     },
     {
       "file": "iot_sim/app.py",
       "name": "App.process_event",
-      "line": 392,
-      "end": 466,
+      "line": 394,
+      "end": 468,
       "kind": "FunctionDef"
     },
     {
       "file": "iot_sim/app.py",
       "name": "App.run",
-      "line": 468,
-      "end": 479,
+      "line": 470,
+      "end": 481,
       "kind": "FunctionDef"
     },
     {
       "file": "iot_sim/app.py",
       "name": "main",
-      "line": 482,
-      "end": 500,
+      "line": 484,
+      "end": 502,
       "kind": "FunctionDef"
     },
     {
@@ -1703,43 +1703,43 @@
     {
       "file": "iot_sim/operations.py",
       "name": "add_entity",
-      "line": 8,
-      "end": 21,
+      "line": 9,
+      "end": 26,
       "kind": "FunctionDef"
     },
     {
       "file": "iot_sim/operations.py",
       "name": "move_entity",
-      "line": 24,
-      "end": 35,
+      "line": 29,
+      "end": 40,
       "kind": "FunctionDef"
     },
     {
       "file": "iot_sim/operations.py",
       "name": "release_cargo",
-      "line": 38,
-      "end": 54,
+      "line": 43,
+      "end": 59,
       "kind": "FunctionDef"
     },
     {
       "file": "iot_sim/operations.py",
       "name": "delete_entity",
-      "line": 57,
-      "end": 70,
+      "line": 62,
+      "end": 75,
       "kind": "FunctionDef"
     },
     {
       "file": "iot_sim/operations.py",
       "name": "set_route",
-      "line": 73,
-      "end": 82,
+      "line": 78,
+      "end": 89,
       "kind": "FunctionDef"
     },
     {
       "file": "iot_sim/operations.py",
       "name": "attach",
-      "line": 85,
-      "end": 90,
+      "line": 92,
+      "end": 97,
       "kind": "FunctionDef"
     },
     {
@@ -1808,57 +1808,57 @@
     {
       "file": "iot_sim/scene.py",
       "name": "encode",
-      "line": 18,
-      "end": 25,
+      "line": 22,
+      "end": 29,
       "kind": "FunctionDef"
     },
     {
       "file": "iot_sim/scene.py",
       "name": "to_scene",
-      "line": 28,
-      "end": 42,
+      "line": 32,
+      "end": 46,
       "kind": "FunctionDef"
     },
     {
       "file": "iot_sim/scene.py",
       "name": "number",
-      "line": 45,
-      "end": 51,
+      "line": 49,
+      "end": 55,
       "kind": "FunctionDef"
     },
     {
       "file": "iot_sim/scene.py",
       "name": "boolean",
-      "line": 54,
-      "end": 57,
+      "line": 58,
+      "end": 61,
       "kind": "FunctionDef"
     },
     {
       "file": "iot_sim/scene.py",
       "name": "object_fields",
-      "line": 60,
-      "end": 63,
+      "line": 64,
+      "end": 67,
       "kind": "FunctionDef"
     },
     {
       "file": "iot_sim/scene.py",
       "name": "parse_scene",
-      "line": 66,
-      "end": 191,
+      "line": 70,
+      "end": 195,
       "kind": "FunctionDef"
     },
     {
       "file": "iot_sim/scene.py",
       "name": "load_scene",
-      "line": 194,
-      "end": 200,
+      "line": 198,
+      "end": 204,
       "kind": "FunctionDef"
     },
     {
       "file": "iot_sim/scene.py",
       "name": "save_scene",
-      "line": 203,
-      "end": 218,
+      "line": 207,
+      "end": 225,
       "kind": "FunctionDef"
     },
     {
@@ -1893,7 +1893,7 @@
       "file": "iot_sim/simulation.py",
       "name": "Simulation",
       "line": 14,
-      "end": 74,
+      "end": 86,
       "kind": "ClassDef"
     },
     {
@@ -1933,16 +1933,30 @@
     },
     {
       "file": "iot_sim/simulation.py",
-      "name": "Simulation.advance",
+      "name": "Simulation._record_sensor",
       "line": 47,
-      "end": 70,
+      "end": 54,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "iot_sim/simulation.py",
+      "name": "Simulation.invalidate_sensor",
+      "line": 56,
+      "end": 62,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "iot_sim/simulation.py",
+      "name": "Simulation.advance",
+      "line": 64,
+      "end": 82,
       "kind": "FunctionDef"
     },
     {
       "file": "iot_sim/simulation.py",
       "name": "Simulation.reset",
-      "line": 72,
-      "end": 74,
+      "line": 84,
+      "end": 86,
       "kind": "FunctionDef"
     },
     {
@@ -2094,247 +2108,331 @@
     },
     {
       "file": "tests/test_simulation.py",
-      "name": "DroneTests",
+      "name": "ClockRegressionTests",
       "line": 124,
-      "end": 171,
+      "end": 142,
+      "kind": "ClassDef"
+    },
+    {
+      "file": "tests/test_simulation.py",
+      "name": "ClockRegressionTests.test_fire_timestamp_without_sensor_samples",
+      "line": 125,
+      "end": 131,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "tests/test_simulation.py",
+      "name": "ClockRegressionTests.test_repeats_follow_clock_between_measurements",
+      "line": 133,
+      "end": 142,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "tests/test_simulation.py",
+      "name": "DroneTests",
+      "line": 145,
+      "end": 192,
       "kind": "ClassDef"
     },
     {
       "file": "tests/test_simulation.py",
       "name": "DroneTests.sim",
-      "line": 125,
-      "end": 126,
+      "line": 146,
+      "end": 147,
       "kind": "FunctionDef"
     },
     {
       "file": "tests/test_simulation.py",
       "name": "DroneTests.test_degenerate_route_returns",
-      "line": 128,
-      "end": 132,
+      "line": 149,
+      "end": 153,
       "kind": "FunctionDef"
     },
     {
       "file": "tests/test_simulation.py",
       "name": "DroneTests.test_loop_closure_and_approach",
-      "line": 134,
-      "end": 143,
+      "line": 155,
+      "end": 164,
       "kind": "FunctionDef"
     },
     {
       "file": "tests/test_simulation.py",
       "name": "DroneTests.test_move_and_delete_keep_cargo_consistent",
-      "line": 145,
-      "end": 154,
+      "line": 166,
+      "end": 175,
       "kind": "FunctionDef"
     },
     {
       "file": "tests/test_simulation.py",
       "name": "DroneTests.test_release_is_atomic_when_full",
-      "line": 156,
-      "end": 163,
+      "line": 177,
+      "end": 184,
       "kind": "FunctionDef"
     },
     {
       "file": "tests/test_simulation.py",
       "name": "DroneTests.test_capacity_and_mixed_load",
-      "line": 165,
-      "end": 171,
+      "line": 186,
+      "end": 192,
       "kind": "FunctionDef"
     },
     {
       "file": "tests/test_simulation.py",
-      "name": "TimeAndSceneTests",
-      "line": 174,
-      "end": 245,
+      "name": "SceneLimitTests",
+      "line": 195,
+      "end": 228,
       "kind": "ClassDef"
     },
     {
       "file": "tests/test_simulation.py",
-      "name": "TimeAndSceneTests.test_lessons_demonstrate_promised_relationships",
-      "line": 175,
-      "end": 198,
+      "name": "SceneLimitTests.test_entity_limit_rejects_edit_without_mutation",
+      "line": 196,
+      "end": 202,
       "kind": "FunctionDef"
     },
     {
       "file": "tests/test_simulation.py",
-      "name": "TimeAndSceneTests.test_scene_can_capture_drone_crossing_ground_sensor",
-      "line": 200,
-      "end": 204,
+      "name": "SceneLimitTests.test_entity_id_limit_rejects_edit",
+      "line": 204,
+      "end": 207,
       "kind": "FunctionDef"
     },
     {
       "file": "tests/test_simulation.py",
-      "name": "TimeAndSceneTests.test_frame_partition_and_seed_reproduce_all_history",
-      "line": 206,
+      "name": "SceneLimitTests.test_route_limit_preserves_old_route",
+      "line": 209,
       "end": 214,
       "kind": "FunctionDef"
     },
     {
       "file": "tests/test_simulation.py",
-      "name": "TimeAndSceneTests.test_all_lessons_roundtrip",
+      "name": "SceneLimitTests.test_oversized_save_preserves_existing_file",
       "line": 216,
-      "end": 224,
+      "end": 228,
       "kind": "FunctionDef"
     },
     {
       "file": "tests/test_simulation.py",
-      "name": "TimeAndSceneTests.test_reject_corrupt_scene_without_mutation",
-      "line": 226,
-      "end": 237,
-      "kind": "FunctionDef"
-    },
-    {
-      "file": "tests/test_simulation.py",
-      "name": "TimeAndSceneTests.test_speed_and_interval_partition",
-      "line": 239,
-      "end": 245,
-      "kind": "FunctionDef"
-    },
-    {
-      "file": "tests/test_simulation.py",
-      "name": "ExportAndFireTests",
-      "line": 248,
-      "end": 292,
+      "name": "TimeAndSceneTests",
+      "line": 231,
+      "end": 302,
       "kind": "ClassDef"
     },
     {
       "file": "tests/test_simulation.py",
-      "name": "ExportAndFireTests.test_unique_sessions_complete_data_and_metadata",
-      "line": 249,
-      "end": 262,
+      "name": "TimeAndSceneTests.test_lessons_demonstrate_promised_relationships",
+      "line": 232,
+      "end": 255,
       "kind": "FunctionDef"
     },
     {
       "file": "tests/test_simulation.py",
-      "name": "ExportAndFireTests.test_invalid_measurements_are_blank",
-      "line": 264,
+      "name": "TimeAndSceneTests.test_scene_can_capture_drone_crossing_ground_sensor",
+      "line": 257,
+      "end": 261,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "tests/test_simulation.py",
+      "name": "TimeAndSceneTests.test_frame_partition_and_seed_reproduce_all_history",
+      "line": 263,
       "end": 271,
       "kind": "FunctionDef"
     },
     {
       "file": "tests/test_simulation.py",
-      "name": "ExportAndFireTests.test_exception_closes_files",
+      "name": "TimeAndSceneTests.test_all_lessons_roundtrip",
       "line": 273,
-      "end": 278,
+      "end": 281,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "tests/test_simulation.py",
+      "name": "TimeAndSceneTests.test_reject_corrupt_scene_without_mutation",
+      "line": 283,
+      "end": 294,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "tests/test_simulation.py",
+      "name": "TimeAndSceneTests.test_speed_and_interval_partition",
+      "line": 296,
+      "end": 302,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "tests/test_simulation.py",
+      "name": "ExportAndFireTests",
+      "line": 305,
+      "end": 349,
+      "kind": "ClassDef"
+    },
+    {
+      "file": "tests/test_simulation.py",
+      "name": "ExportAndFireTests.test_unique_sessions_complete_data_and_metadata",
+      "line": 306,
+      "end": 319,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "tests/test_simulation.py",
+      "name": "ExportAndFireTests.test_invalid_measurements_are_blank",
+      "line": 321,
+      "end": 328,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "tests/test_simulation.py",
+      "name": "ExportAndFireTests.test_exception_closes_files",
+      "line": 330,
+      "end": 335,
       "kind": "FunctionDef"
     },
     {
       "file": "tests/test_simulation.py",
       "name": "ExportAndFireTests.test_ignition_needs_heat_time_and_flammability",
-      "line": 280,
-      "end": 286,
+      "line": 337,
+      "end": 343,
       "kind": "FunctionDef"
     },
     {
       "file": "tests/test_simulation.py",
       "name": "ExportAndFireTests.test_cool_source_does_not_ignite",
-      "line": 288,
-      "end": 292,
+      "line": 345,
+      "end": 349,
       "kind": "FunctionDef"
     },
     {
       "file": "tests/test_ui.py",
       "name": "UITests",
-      "line": 20,
-      "end": 191,
+      "line": 21,
+      "end": 238,
       "kind": "ClassDef"
     },
     {
       "file": "tests/test_ui.py",
       "name": "UITests.setUp",
-      "line": 21,
-      "end": 25,
+      "line": 22,
+      "end": 26,
       "kind": "FunctionDef"
     },
     {
       "file": "tests/test_ui.py",
       "name": "UITests.tearDown",
-      "line": 27,
-      "end": 30,
+      "line": 28,
+      "end": 31,
       "kind": "FunctionDef"
     },
     {
       "file": "tests/test_ui.py",
       "name": "UITests.click",
-      "line": 32,
-      "end": 41,
+      "line": 33,
+      "end": 42,
       "kind": "FunctionDef"
     },
     {
       "file": "tests/test_ui.py",
       "name": "UITests.mapclick",
-      "line": 43,
-      "end": 47,
+      "line": 44,
+      "end": 48,
       "kind": "FunctionDef"
     },
     {
       "file": "tests/test_ui.py",
       "name": "UITests.key",
-      "line": 49,
-      "end": 50,
+      "line": 50,
+      "end": 51,
       "kind": "FunctionDef"
     },
     {
       "file": "tests/test_ui.py",
       "name": "UITests.test_all_lessons_graphs_and_resizing",
-      "line": 52,
-      "end": 65,
+      "line": 53,
+      "end": 66,
       "kind": "FunctionDef"
     },
     {
       "file": "tests/test_ui.py",
       "name": "UITests.test_editor_and_actual_event_coordinates",
-      "line": 67,
-      "end": 82,
+      "line": 68,
+      "end": 83,
       "kind": "FunctionDef"
     },
     {
       "file": "tests/test_ui.py",
       "name": "UITests.test_right_click_and_del_both_release",
-      "line": 84,
-      "end": 96,
+      "line": 85,
+      "end": 97,
       "kind": "FunctionDef"
     },
     {
       "file": "tests/test_ui.py",
       "name": "UITests.test_drag_drop_sensor_to_drone_panel",
-      "line": 98,
-      "end": 109,
+      "line": 99,
+      "end": 110,
       "kind": "FunctionDef"
     },
     {
       "file": "tests/test_ui.py",
       "name": "UITests.test_route_keyboard_and_cancel",
-      "line": 111,
-      "end": 124,
+      "line": 112,
+      "end": 125,
       "kind": "FunctionDef"
     },
     {
       "file": "tests/test_ui.py",
       "name": "UITests.test_save_load_seed_invalid_load_preserves_scene",
-      "line": 126,
-      "end": 147,
+      "line": 127,
+      "end": 148,
       "kind": "FunctionDef"
     },
     {
       "file": "tests/test_ui.py",
       "name": "UITests.test_panel_controls_and_filters",
-      "line": 149,
-      "end": 163,
+      "line": 150,
+      "end": 164,
       "kind": "FunctionDef"
     },
     {
       "file": "tests/test_ui.py",
       "name": "UITests.test_source_fire_and_alarm_controls",
-      "line": 165,
-      "end": 184,
+      "line": 166,
+      "end": 185,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "tests/test_ui.py",
+      "name": "UITests.test_route_editor_keeps_valid_draft_at_limit",
+      "line": 187,
+      "end": 199,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "tests/test_ui.py",
+      "name": "UITests.test_toggle_records_invalid_point_and_csv_gap",
+      "line": 201,
+      "end": 215,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "tests/test_ui.py",
+      "name": "UITests.test_map_edit_pauses_running_experiment",
+      "line": 217,
+      "end": 222,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "tests/test_ui.py",
+      "name": "UITests.test_scene_replacement_clears_pending_drag_and_tool",
+      "line": 224,
+      "end": 231,
       "kind": "FunctionDef"
     },
     {
       "file": "tests/test_ui.py",
       "name": "UITests.test_exception_path_closes_exporter",
-      "line": 186,
-      "end": 191,
+      "line": 233,
+      "end": 238,
       "kind": "FunctionDef"
     },
     {

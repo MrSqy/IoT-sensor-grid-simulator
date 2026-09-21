@@ -9,7 +9,7 @@
     "iot_sim/IoT.py": "1610150789286866e6bdc871ba83c351a039b58107ade57a0920f8c55637311e",
     "iot_sim/__init__.py": "037f5aada316ca4e4becdd02cf4536e9a312f4501395b8ac189677c08a9577f0",
     "iot_sim/alarm_bridge.py": "c9c34a5e6559887c8908d62cc77746f8eee8070585a6ed0ed7ba76c757f9f646",
-    "iot_sim/app.py": "724b573d30513229aa06475a3d8b044c513c08032ad46940a1086a9f7394bcec",
+    "iot_sim/app.py": "00ee58d6a0682de76c0d8ec5116f05aec26c3d8d44ac7cb4bc73db322208acf3",
     "iot_sim/assets.py": "a9d5d69eb3680f8f8ab738ad6c5ff53ae88cebbfc3e6aadd13abe88d0a42a043",
     "iot_sim/camera.py": "ee31c120d400435509c35c288f24b153836ff5710a3eeb5ccf82260f83562100",
     "iot_sim/cargo.py": "851cfdb45c3088681550aebafdb65b7dd75cfff4acb4f80114bea7c35317a7ad",
@@ -21,12 +21,12 @@
     "iot_sim/graphs.py": "26ba54e70e72bde012538d915828f1c7dc6598e6537c48228e5dfaece134b73d",
     "iot_sim/lessons.py": "98df01f109a513961edf06013986d6b451f9e17fac66fb0903c2cded404a4fe3",
     "iot_sim/models.py": "fbaf72e8293f9f6aaf3b25d02f41f1a359a898785d647cf298a4e38a1dfb4b78",
-    "iot_sim/operations.py": "eb6d2efc923ea5c5c65ad57d5e285614885475f360bbeea3d5d2624293619a71",
+    "iot_sim/operations.py": "df08b248b8c6c0b6b7d1c3a2c868ae1fb860fab548ad5f77e84ed2ac88d8eb2c",
     "iot_sim/panel.py": "0de55680adfa5665384c27f739aa318be83a0a630f3a7a325ace98670cdf3499",
     "iot_sim/render.py": "556c6740d766d2c615597725c82cbab9448407886d8d2478a41bbef496d8ee15",
-    "iot_sim/scene.py": "a5ad84ad9ddd547858392a5ce2c7016ab4ef96aa5bbcfc53ebc708688b87fe7f",
+    "iot_sim/scene.py": "23355cb90a0bb843dad1fe9fc5012900dec4edcf0983cb14c11c1b0707889642",
     "iot_sim/sensors.py": "f4eb81b41eb4f2d511d1658e4d1c4294371d3b1059615097c6b1e7c845d5bb2e",
-    "iot_sim/simulation.py": "33e3924ca76467de6beb77b5c22af3237d77edc8b2cadedd736f41e8d7abcbca",
+    "iot_sim/simulation.py": "00a4f785f08ab6e4dbb52c28af7e8735bb8864caeee912daf14e8f0d1aa97374",
     "iot_sim/uav.py": "6a54ae8486d0a5db30ca4cc7855599d25ab1dc8d05e831260ca67aba73b25cc6",
     "iot_sim/ui_widgets.py": "2e25a52b0f0abdce17a937dd87c22dd02f08bc3ae31e96734ec0fe16f88a4154",
     "iot_sim/viz.py": "b149d103f9f40289da28dbb0cca22764bd83a2104df75c4d01d69b3dc6145bb5",
@@ -84,17 +84,17 @@
     "frames": 150,
     "includes_model_and_drawing": true,
     "theoretical_layer": true,
-    "median_ms": 19.550288000573346,
-    "p95_ms": 25.737457999639446,
-    "max_ms": 28.946459999133367,
+    "median_ms": 23.79254600054992,
+    "p95_ms": 35.66923099970154,
+    "max_ms": 46.954445000665146,
     "cache_bytes": 16202880,
     "cache_limit_bytes": 16777216
   },
   "maximum_radius": {
     "source_range": 80,
     "zoom": 3.5,
-    "frame_ms": 11.915472001419403,
+    "frame_ms": 15.868320999288699,
     "cache_bytes": 16202880
   },
-  "peak_rss_mib": 186.54296875
+  "peak_rss_mib": 184.9140625
 }
