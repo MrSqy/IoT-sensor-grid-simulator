@@ -33,7 +33,7 @@ class RouteMode(str, Enum):
     PINGPONG = "PINGPONG"
 
 
-# ---------- Gerçek dünya eşik değerleri ----------
+# Eğitim varsayılanlarıdır; maruziyet/güvenlik standardı değildir.
 GAS_CRITICAL_PPM: dict[GasMode, float] = {
     GasMode.CO:   35.0,
     GasMode.CO2:  5000.0,
@@ -60,6 +60,17 @@ class SensorProps:
     efficiency: int = 80
     battery: float = 5000.0
     active: bool = True
+    enabled: bool = True
+    status: str = "WAITING"
+    sample_interval: float = 1.0
+    noise_percent: float = 5.0
+    offsets: dict[str, float] = field(default_factory=lambda: {m.value: 0.0 for m in SensorMode})
+    thresholds: dict[str, float] = field(default_factory=lambda: {"TEMP": 60.0, "CO": 35.0, "CO2": 5000.0, "H2": 4000.0})
+    clear_thresholds: dict[str, float] = field(default_factory=lambda: {"TEMP": 55.0, "CO": 30.0, "CO2": 4500.0, "H2": 3500.0})
+    theoretical: dict[str, float] = field(default_factory=dict)
+    elapsed: float = 0.0
+    repeat_seconds: float = 0.0
+    valid: bool = False
 
     # Sensör modları — sadece seçili olanlar ölçülür
     # Varsayılan: hepsi açık
@@ -72,10 +83,10 @@ class SensorProps:
     max_limit: int = 40    # pencere başına maksimum işlem hakkı
 
     # Ölçüm değerleri
-    last_temp: float = 0.0
-    last_co:  float = 0.0
-    last_co2: float = 0.0
-    last_h2:  float = 0.0
+    last_temp: float | None = None
+    last_co:  float | None = None
+    last_co2: float | None = None
+    last_h2:  float | None = None
     last_gas: float = 0.0
 
 
@@ -111,6 +122,7 @@ class UavProps:
     y: float = 0.0
     carrying_ids: list[int] = field(default_factory=list)
     show_route: bool = True
+    blocked_reason: str = ""
 
 
 @dataclass
@@ -126,6 +138,10 @@ class Entity:
     show_effect: bool = True
     carried_by: int | None = None
     icon_override: str | None = None
+    flammable: bool = True
+    ignition_temp: float = 120.0
+    ignition_seconds: float = 3.0
+    heat_seconds: float = 0.0
 
     @property
     def display_name(self) -> str:

@@ -21,7 +21,7 @@ class Logger: # Klasik logger sınıfı
 
 class RateLimiter:
 
-    def __init__(self, n: int):
+    def __init__(self, n: int, clock=None):
     
         if not isinstance(n, int):
             raise TypeError("İşlem hakkı için yanlış veri tipi girildi")
@@ -29,7 +29,8 @@ class RateLimiter:
         self.max_remaining = n # İşlem hakkı sayısının sıfırlanacağı sabit değeri tutan değişken
         self.remaining = n # İşlem hakkı sayısının tutulacağı değişken
         self.window_seconds = 60 # İşlem hakkı sayısının sıfırlanması için geçmesi gereken süreyi tutan değişken
-        self.setTime = datetime.datetime.now() # İşlem hakkı sayısının atandığı ilk süreyi tutan değişken
+        self._clock = clock or time.monotonic
+        self.setTime = self._clock()
         self.delta = 0 # İşlem hakkı sayısının sıfırlanmasına kalan süreyi tutan değişken
 
     @property
@@ -45,16 +46,20 @@ class RateLimiter:
         self._remaining = n
 
     def allow(self) -> bool: # İşlem hakkı var mı yok mu test eder
-        currentTime = datetime.datetime.now() 
-        self.delta = (currentTime - self.setTime).total_seconds()
-
-        if self.delta >= self.window_seconds:
-            self.remaining = self.max_remaining
-            self.setTime = currentTime
+        self.refresh()
         if self.remaining <= 0:
             return False
         self.remaining -= 1
         return True
+
+    def refresh(self) -> None:
+        """Hak tüketmeden, verilen saatle pencereyi yenile."""
+        current = self._clock()
+        self.delta = current - self.setTime
+        if self.delta >= self.window_seconds:
+            self.remaining = self.max_remaining
+            self.setTime = current
+            self.delta = 0.0
 
     def __call__(self) -> bool: # Nesne çağrılırsa yapılacak fonksiyonu işaret eder
         return self.allow()

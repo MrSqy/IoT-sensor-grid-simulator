@@ -65,17 +65,14 @@ def bresenham_tiles(x0: int, y0: int, x1: int, y1: int):
             err += dx
             y += sy
 
-def route_is_valid(route_points: list[tuple[int, int]], obstacle_tiles: set[tuple[int, int]]) -> bool:
-    """Returns False if any segment intersects an obstacle tile."""
-    if len(route_points) < 2:
-        return True
-    for i in range(1, len(route_points)):
-        x0, y0 = route_points[i - 1]
-        x1, y1 = route_points[i]
-        for (x, y) in bresenham_tiles(x0, y0, x1, y1):
-            # allow the starting tile; everything else must be free
-            if (x, y) == (x0, y0):
-                continue
-            if (x, y) in obstacle_tiles:
-                return False
-    return True
+def route_is_valid(route_points, obstacle_tiles, mode=RouteMode.LOOP, start=None) -> bool:
+    """Başlangıç, tüm parçalar ve LOOP dönüşünü kapsayan rota kontrolü."""
+    if len(set(route_points)) < 2:
+        return False
+    points = list(route_points)
+    if mode == RouteMode.LOOP:
+        points.append(points[0])
+    if start is not None:
+        points.insert(0, tuple(int(round(v)) for v in start))
+    return all(not any(p in obstacle_tiles for p in bresenham_tiles(*a, *b))
+               for a, b in zip(points, points[1:]))

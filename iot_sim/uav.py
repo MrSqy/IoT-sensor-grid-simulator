@@ -1,71 +1,57 @@
+"""Sonlu rota takibi ve tüm durumlarda yük konumu eşitleme."""
 import math
+from .models import Kind, RouteMode
+from .engine import clamp, route_is_valid, find_entity_by_id, bresenham_tiles
 
-from .models import Entity, Kind
-from .engine import clamp, find_entity_by_id
+
+def sync_cargo(entities, drone):
+    """Rotasız/duraklatılmış araçta da yük koordinatlarını eşitle."""
+    for cid in drone.uav.carrying_ids:
+        cargo = find_entity_by_id(entities, cid)
+        if cargo:
+            cargo.tx, cargo.ty = drone.tx, drone.ty
 
 
-def update_uavs(entities: list[Entity], dt: float, map_w: int, map_h: int):
-    for u in entities:
-        if u.kind != Kind.UAV or u.uav is None:
+def update_uavs(entities, dt, map_w, map_h):
+    """Geçerli rotada süre kadar ilerle; kapalı yolu aşmadan dur."""
+    obstacles = {(e.tx, e.ty) for e in entities if e.kind == Kind.OBSTACLE}
+    for e in entities:
+        up = e.uav
+        if e.kind != Kind.UAV or up is None:
             continue
-
-        up = u.uav
-        if not up.route or len(up.route) < 2:
-            continue
-
-        speed = clamp(up.speed, 1.0, 10.0)
-        remaining = speed * dt  # tiles to move this frame
-
-        while remaining > 1e-6:
-            # Clamp waypoint index
-            up.route_i = int(clamp(up.route_i, 0, len(up.route) - 1))
-            target_i = up.route_i
-            tx, ty = up.route[target_i]
-
-            dx = tx - up.x
-            dy = ty - up.y
-            d = math.hypot(dx, dy)
-
-            if d < 1e-6:
-                # reached this waypoint, choose next
-                next_i = target_i + up.route_dir
-
-                if up.route_mode.value == "LOOP":
-                    if next_i >= len(up.route):
-                        next_i = 0
-                    if next_i < 0:
-                        next_i = len(up.route) - 1
-                    up.route_i = next_i
-
-                else:  # PINGPONG
-                    if next_i >= len(up.route) or next_i < 0:
-                        up.route_dir *= -1
-                        next_i = target_i + up.route_dir
-                        next_i = int(clamp(next_i, 0, len(up.route) - 1))
-                    up.route_i = next_i
-
-                continue
-
-            step = min(remaining, d)
-            up.x += (dx / d) * step
-            up.y += (dy / d) * step
-            remaining -= step
-
-        # Keep inside map bounds
-        up.x = clamp(up.x, 0.0, map_w - 1.0)
-        up.y = clamp(up.y, 0.0, map_h - 1.0)
-
-        # Update tile coords for rendering/selection
-        u.tx = int(round(up.x))
-        u.ty = int(round(up.y))
-        u.tx = int(clamp(u.tx, 0, map_w - 1))
-        u.ty = int(clamp(u.ty, 0, map_h - 1))
-
-        # Move carried items with UAV
-        for cid in up.carrying_ids:
-            ce = find_entity_by_id(entities, cid)
-            if ce is None:
-                continue
-            ce.tx = u.tx
-            ce.ty = u.ty
-
+        up.blocked_reason = ""
+        if up.route:
+            target = int(clamp(up.route_i, 0, len(up.route) - 1))
+            if not route_is_valid(up.route, obstacles, up.route_mode):
+                up.blocked_reason = "Rota geçersiz: iki farklı durak ve açık yol gerekli."
+            elif any(p in obstacles for p in bresenham_tiles(e.tx, e.ty, *up.route[target])):
+                up.blocked_reason = "Sıradaki durağa giden yol kapalı."
+            if not up.blocked_reason:
+                remaining = max(0, dt) * clamp(up.speed, 1, 10)
+                zero_hops = 0
+                while remaining > 1e-9:
+                    up.route_i = int(clamp(up.route_i, 0, len(up.route) - 1))
+                    tx, ty = up.route[up.route_i]
+                    dx, dy = tx - up.x, ty - up.y
+                    distance = math.hypot(dx, dy)
+                    if distance < 1e-9:
+                        zero_hops += 1
+                        if zero_hops > len(up.route) * 2:
+                            up.blocked_reason = "Rotada ilerlenemiyor."
+                            break
+                        nxt = up.route_i + up.route_dir
+                        if up.route_mode == RouteMode.LOOP:
+                            nxt %= len(up.route)
+                        elif not 0 <= nxt < len(up.route):
+                            up.route_dir *= -1
+                            nxt = up.route_i + up.route_dir
+                        up.route_i = nxt
+                        continue
+                    zero_hops = 0
+                    step = min(remaining, distance)
+                    up.x += dx / distance * step
+                    up.y += dy / distance * step
+                    remaining -= step
+        up.x, up.y = clamp(up.x, 0, map_w - 1), clamp(up.y, 0, map_h - 1)
+        e.tx, e.ty = int(round(up.x)), int(round(up.y))
+        sync_cargo(entities, e)

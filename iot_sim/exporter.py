@@ -1,95 +1,84 @@
-# iot_sim/exporter.py
-import os, csv, time, json
+"""Her deney için ayrı, üzerine yazılmayan sonuç klasörü."""
+import csv
+import json
+import tempfile
+from contextlib import ExitStack
+from datetime import datetime
+from pathlib import Path
+from .sensors import VALUE_ATTR, position
+from .scene import MODEL_VERSION
 
-def ensure_dir(path: str):
-    os.makedirs(path, exist_ok=True)
+ROOT = Path(__file__).resolve().parent.parent
 
-def timestamp_tag():
-    return time.strftime("%Y%m%d_%H%M%S")
 
 class Exporter:
-    def __init__(self, out_dir="exports", tag=None):
-        ensure_dir(out_dir)
-        if tag is None:
-            tag = timestamp_tag()
+    def __init__(self, out_dir=None, tag=None, scene=None):
+        root = Path(out_dir) if out_dir is not None else ROOT / "exports"
+        root.mkdir(parents=True, exist_ok=True)
+        self.directory = Path(tempfile.mkdtemp(prefix=datetime.now().strftime("%Y%m%d_%H%M%S_"), dir=root))
+        self.stack = ExitStack()
+        self.streams = []
+        self.closed = False
+        self.rows = 0
+        try:
+            self.csv_path = self.directory / "sensor_log.csv"
+            self.alarm_path = self.directory / "alarm_log.csv"
+            self.actions_path = self.directory / "changes.jsonl"
+            self._sensor = self._writer(self.csv_path, ["t", "sensor_id", "sensor_name", "x", "y", "carried_by",
+                "channel", "valid", "status", "measured", "theoretical", "battery", "threshold", "clear_threshold"])
+            self._alarm = self._writer(self.alarm_path, ["t", "sensor_id", "sensor_name", "channel", "kind", "value", "details"])
+            self._actions = self.stack.enter_context(self.actions_path.open("x", encoding="utf-8"))
+            self.streams.append(self._actions)
+            metadata = {"schema_version": 2, "model_version": MODEL_VERSION, "scene": scene,
+                        "units": {"TEMP": "°C", "CO": "ppm", "CO2": "ppm", "H2": "ppm", "battery": "eğitim enerji birimi"}}
+            (self.directory / "experiment.json").write_text(json.dumps(metadata, ensure_ascii=False, indent=2, allow_nan=False))
+        except Exception:
+            self.stack.close()
+            raise
 
-        self.csv_path = os.path.join(out_dir, f"sensor_log_{tag}.csv")
-        self.poly_path = os.path.join(out_dir, f"threat_polygons_{tag}.jsonl")
-        self.alarm_path = os.path.join(out_dir, f"alarm_log_{tag}.csv")
+    def _writer(self, path, fields):
+        f = self.stack.enter_context(path.open("x", newline="", encoding="utf-8"))
+        self.streams.append(f)
+        writer = csv.DictWriter(f, fieldnames=fields)
+        writer.writeheader()
+        return writer
 
-        self._csv_f = open(self.csv_path, "w", newline="", encoding="utf-8")
-        self._csv_w = csv.DictWriter(self._csv_f, fieldnames=[
-            "t", "sensor_id", "sensor_name", "sx", "sy",
-            "modes",
-            "temp_c", "co_ppm", "co2_ppm", "h2_ppm", "gas_total_ppm",
-            "battery", "active", "efficiency", "range_tiles",
-            "limit", "max_limit",
-            "threat_active", "threat_area", "threat_points_count"
-        ])
-        self._csv_w.writeheader()
+    def log_sensor(self, sim_time, entity, entities=None):
+        s = entity.sensor
+        x, y = position(entity, entities or [entity])
+        for channel, attr in VALUE_ATTR.items():
+            value = getattr(s, attr)
+            valid = s.valid and value is not None
+            self._sensor.writerow(dict(t=round(sim_time, 6), sensor_id=entity.id, sensor_name=entity.name,
+                x=x, y=y, carried_by=entity.carried_by, channel=channel, valid=int(valid), status=s.status,
+                measured=value if valid else "", theoretical=s.theoretical.get(channel) if valid else "",
+                battery=s.battery, threshold=s.thresholds[channel], clear_threshold=s.clear_thresholds[channel]))
+        self.rows += 1
+        if self.rows % 20 == 0:
+            self.flush()
 
-        self._poly_f = open(self.poly_path, "w", encoding="utf-8")
+    def log_event(self, event):
+        self._alarm.writerow(event)
+        self.flush()
 
-        self._alarm_f = open(self.alarm_path, "w", newline="", encoding="utf-8")
-        self._alarm_w = csv.DictWriter(self._alarm_f, fieldnames=[
-            "t", "sensor_id", "sensor_name", "alert_type", "details"
-        ])
-        self._alarm_w.writeheader()
+    def log_change(self, sim_time, action, scene):
+        self._actions.write(json.dumps(dict(t=round(sim_time, 6), action=action, scene=scene),
+                                       ensure_ascii=False, allow_nan=False) + "\n")
+        self.flush()
 
-    def log_sensor(self, sim_time: float, sensor_entity):
-        s = sensor_entity.sensor
-        threat_points = getattr(s, "threat_points", []) or []
-        threat_area = float(getattr(s, "threat_area", 0.0))
-        threat_active = bool(getattr(s, "threat_active", False))
-
-        modes = getattr(s, "modes", set())
-        modes_str = ",".join(sorted(m.value for m in modes)) if modes else ""
-
-        self._csv_w.writerow({
-            "t": round(sim_time, 3),
-            "sensor_id": sensor_entity.id,
-            "sensor_name": getattr(sensor_entity, "name", ""),
-            "sx": sensor_entity.tx,
-            "sy": sensor_entity.ty,
-            "modes": modes_str,
-            "temp_c": round(float(getattr(s, "last_temp", 0.0)), 2),
-            "co_ppm": round(float(getattr(s, "last_co", 0.0)), 2),
-            "co2_ppm": round(float(getattr(s, "last_co2", 0.0)), 2),
-            "h2_ppm": round(float(getattr(s, "last_h2", 0.0)), 2),
-            "gas_total_ppm": round(float(getattr(s, "last_gas", 0.0)), 2),
-            "battery": round(float(getattr(s, "battery", 0.0)), 1),
-            "active": int(bool(getattr(s, "active", True))),
-            "efficiency": int(getattr(s, "efficiency", 100)),
-            "range_tiles": int(getattr(s, "range_tiles", 0)),
-            "limit": int(getattr(s, "limit", 0)),
-            "max_limit": int(getattr(s, "max_limit", 40)),
-            "threat_active": int(threat_active),
-            "threat_area": round(threat_area, 6),
-            "threat_points_count": len(threat_points),
-        })
-
-        if threat_active and len(threat_points) >= 3:
-            rec = {
-                "t": round(sim_time, 3),
-                "sensor_id": sensor_entity.id,
-                "sensor_pos": [sensor_entity.tx, sensor_entity.ty],
-                "vertices": [[float(x), float(y)] for (x, y) in threat_points],
-                "area": threat_area,
-            }
-            self._poly_f.write(json.dumps(rec, ensure_ascii=False) + "\n")
-
-    def log_alarm(self, sim_time: float, sensor_entity, alert_type: str, details: str):
-        """Alarm olaylarını ayrı CSV'ye kaydet."""
-        self._alarm_w.writerow({
-            "t": round(sim_time, 3),
-            "sensor_id": sensor_entity.id,
-            "sensor_name": getattr(sensor_entity, "name", ""),
-            "alert_type": alert_type,
-            "details": details,
-        })
+    def flush(self):
+        for stream in self.streams:
+            if not stream.closed:
+                stream.flush()
 
     def close(self):
-        self._csv_f.close()
-        self._poly_f.close()
-        self._alarm_f.close()
-        return self.csv_path, self.poly_path, self.alarm_path
+        if not self.closed:
+            self.stack.close()
+            self.closed = True
+        return self.directory
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, exc_type, exc, traceback):
+        self.close()
