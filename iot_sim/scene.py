@@ -8,6 +8,10 @@ from pathlib import Path
 from .models import Entity, Kind, SensorProps, SourceProps, SourceType, SensorMode, GasMode, UavProps, RouteMode
 
 SCHEMA_VERSION = 1
+MAX_ENTITIES = 500
+MAX_ROUTE_POINTS = 500
+MAX_ENTITY_ID = 10**9
+MAX_SCENE_BYTES = 2_000_000
 MODEL_VERSION = "education-2.0"
 CHANNELS = ("TEMP", "CO", "CO2", "H2")
 SENSOR_FIELDS = ("range_tiles", "efficiency", "battery", "enabled", "sample_interval", "noise_percent",
@@ -74,13 +78,13 @@ def parse_scene(data):
         seed = number(data["seed"], 0, 2**32 - 1, "Tohum", True)
         lesson = number(data.get("lesson", 0), 0, 6, "Deney", True)
         rows = data["entities"]
-        if not isinstance(rows, list) or len(rows) > 500:
-            raise ValueError("Sahne en fazla 500 nesne içerebilir.")
+        if not isinstance(rows, list) or len(rows) > MAX_ENTITIES:
+            raise ValueError(f"Sahne en fazla {MAX_ENTITIES} nesne içerebilir.")
         entities, ids, occupied = [], set(), set()
         for row in rows:
             object_fields(row, ("id", "kind", "tx", "ty", "name", "show_effect", "carried_by", "icon_override",
                                 "flammable", "ignition_temp", "ignition_seconds", "sensor", "source", "uav"), "Nesne")
-            eid = number(row["id"], 1, 10**9, "Kimlik", True)
+            eid = number(row["id"], 1, MAX_ENTITY_ID, "Kimlik", True)
             if eid in ids:
                 raise ValueError("Tekrarlanan nesne kimliği.")
             ids.add(eid)
@@ -97,7 +101,7 @@ def parse_scene(data):
             e.ignition_seconds = number(row.get("ignition_seconds", 3), .1, 300, "Tutuşma süresi")
             e.carried_by = row.get("carried_by")
             if e.carried_by is not None:
-                number(e.carried_by, 1, 10**9, "Taşıyıcı kimliği", True)
+                number(e.carried_by, 1, MAX_ENTITY_ID, "Taşıyıcı kimliği", True)
             elif kind != Kind.UAV and (x, y) in occupied:
                 raise ValueError("Bağımsız nesneler aynı karede olamaz.")
             elif kind != Kind.UAV:
@@ -155,8 +159,8 @@ def parse_scene(data):
                 u.speed = number(p.get("speed", 3), 1, 10, "Hız")
                 u.route_mode = RouteMode(p.get("route_mode", "LOOP"))
                 route = p.get("route", [])
-                if not isinstance(route, list) or len(route) > 500:
-                    raise ValueError("Rota en fazla 500 durak içerebilir.")
+                if not isinstance(route, list) or len(route) > MAX_ROUTE_POINTS:
+                    raise ValueError(f"Rota en fazla {MAX_ROUTE_POINTS} durak içerebilir.")
                 u.route = []
                 for point in route:
                     if not isinstance(point, list) or len(point) != 2:
@@ -168,7 +172,7 @@ def parse_scene(data):
                 if not isinstance(u.carrying_ids, list) or len(u.carrying_ids) > 3:
                     raise ValueError("Yük listesi geçersiz.")
                 for cid in u.carrying_ids:
-                    number(cid, 1, 10**9, "Yük kimliği", True)
+                    number(cid, 1, MAX_ENTITY_ID, "Yük kimliği", True)
                 if len(set(u.carrying_ids)) != len(u.carrying_ids):
                     raise ValueError("Tekrarlanan yük.")
                 u.show_route = boolean(p.get("show_route", True), "Rota görünürlüğü")
@@ -193,7 +197,7 @@ def parse_scene(data):
 
 def load_scene(path):
     path = Path(path)
-    if path.stat().st_size > 2_000_000:
+    if path.stat().st_size > MAX_SCENE_BYTES:
         raise ValueError("Sahne dosyası 2 MB sınırını aşıyor.")
     data = json.loads(path.read_text(encoding="utf-8"))
     parse_scene(data)
@@ -203,13 +207,16 @@ def load_scene(path):
 def save_scene(path, data):
     """Önce doğrula; yarım dosya bırakmadan atomik değiştir."""
     parse_scene(data)
+    payload = json.dumps(data, ensure_ascii=False, indent=2, allow_nan=False).encode("utf-8")
+    if len(payload) > MAX_SCENE_BYTES:
+        raise ValueError("Sahne dosyası 2 MB sınırını aşıyor; mevcut dosya değiştirilmedi.")
     path = Path(path)
     path.parent.mkdir(parents=True, exist_ok=True)
     temporary = None
     try:
-        with tempfile.NamedTemporaryFile(mode="w", encoding="utf-8", dir=path.parent, delete=False) as f:
+        with tempfile.NamedTemporaryFile(mode="wb", dir=path.parent, delete=False) as f:
             temporary = f.name
-            json.dump(data, f, ensure_ascii=False, indent=2, allow_nan=False)
+            f.write(payload)
             f.flush()
             os.fsync(f.fileno())
         os.replace(temporary, path)

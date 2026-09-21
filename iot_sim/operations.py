@@ -3,12 +3,17 @@ from .models import Kind, Entity, SensorProps, SourceProps, UavProps
 from .engine import find_entity_by_id, tile_occupied, route_is_valid
 from .cargo import attach_to_uav
 from .uav import sync_cargo
+from .scene import MAX_ENTITIES, MAX_ROUTE_POINTS, MAX_ENTITY_ID
 
 
 def add_entity(sim, kind, x, y):
     """Boş ve sınırlar içindeki kareye benzersiz kimlikle nesne ekle."""
     if not (0 <= x < sim.width and 0 <= y < sim.height) or tile_occupied(sim.entities, x, y):
         raise ValueError("Bu kare dolu veya harita dışında.")
+    if len(sim.entities) >= MAX_ENTITIES:
+        raise ValueError(f"Sahne en fazla {MAX_ENTITIES} nesne içerebilir.")
+    if sim.next_id > MAX_ENTITY_ID:
+        raise ValueError("Yeni nesne kimliği sahne sınırını aşıyor.")
     e = Entity(sim.next_id, kind, x, y)
     if kind == Kind.SENSOR:
         e.sensor = SensorProps()
@@ -72,6 +77,8 @@ def delete_entity(sim, eid):
 
 def set_route(sim, drone, points):
     """Rota türü ve ilk yaklaşım dahil geçerli rotayı atomik olarak kur."""
+    if len(points) > MAX_ROUTE_POINTS:
+        raise ValueError(f"Rota en fazla {MAX_ROUTE_POINTS} durak içerebilir.")
     obstacles = {(e.tx, e.ty) for e in sim.entities if e.kind == Kind.OBSTACLE}
     if any(not (0 <= x < sim.width and 0 <= y < sim.height) for x, y in points):
         raise ValueError("Durak harita dışında.")

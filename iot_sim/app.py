@@ -5,7 +5,7 @@ from pathlib import Path
 import pygame
 from .models import Kind, SensorMode, GasMode, SourceType, RouteMode
 from .simulation import Simulation
-from .scene import load_scene, save_scene, to_scene, parse_scene
+from .scene import load_scene, save_scene, to_scene, parse_scene, MAX_ROUTE_POINTS
 from .lessons import lesson_scene, LESSONS
 from .exporter import Exporter, ROOT
 from .engine import find_entity_at, find_entity_by_id, clamp
@@ -376,6 +376,8 @@ class App:
             self.mode=None
             self.change("attach")
         elif self.mode=="route":
+            if len(self.route_points)>=MAX_ROUTE_POINTS:
+                raise ValueError(f"Rota en fazla {MAX_ROUTE_POINTS} durak içerebilir.")
             if self.route_points and self.route_points[-1]==(x,y):
                 raise ValueError("Aynı durağı arka arkaya ekleme.")
             self.route_points.append((x,y))

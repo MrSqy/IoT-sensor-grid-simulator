@@ -184,6 +184,20 @@ class UITests(unittest.TestCase):
         self.click("ignition_plus")
         self.assertEqual(self.app.selected.ignition_temp,130)
 
+    def test_route_editor_keeps_valid_draft_at_limit(self):
+        self.app.replace_sim(lesson_scene(5))
+        self.app.selected_id=1
+        self.app.action(("route",))
+        self.app.route_points=[(7,12),(18,12)]*250
+        before=list(self.app.route_points)
+        self.mapclick(9,13)
+        self.assertEqual(self.app.route_points,before)
+        self.assertIn("500",self.app.toast)
+        self.key(pygame.K_k)
+        self.assertIsNone(self.app.mode)
+        self.assertEqual(self.app.selected.uav.route,before)
+        parse_scene(self.app.sim.snapshot())
+
     def test_toggle_records_invalid_point_and_csv_gap(self):
         self.app.selected_id=1
         self.app.action(("play",))

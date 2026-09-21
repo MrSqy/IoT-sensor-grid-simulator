@@ -192,6 +192,42 @@ class DroneTests(unittest.TestCase):
         with self.assertRaises(ValueError): operations.attach(sim,drone.id,source.id)
 
 
+class SceneLimitTests(unittest.TestCase):
+    def test_entity_limit_rejects_edit_without_mutation(self):
+        entities=[Entity(i+1,Kind.OBSTACLE,i%25,i//25) for i in range(500)]
+        sim=Simulation(to_scene(entities))
+        before=sim.snapshot()
+        with self.assertRaises(ValueError): operations.add_entity(sim,Kind.SENSOR,100,100)
+        self.assertEqual(sim.snapshot(),before)
+        self.assertEqual(sim.next_id,501)
+
+    def test_entity_id_limit_rejects_edit(self):
+        sim=Simulation(to_scene([Entity(10**9,Kind.OBSTACLE,0,0)]))
+        with self.assertRaises(ValueError): operations.add_entity(sim,Kind.SENSOR,1,0)
+        self.assertEqual(len(sim.entities),1)
+
+    def test_route_limit_preserves_old_route(self):
+        sim=Simulation(lesson_scene(5))
+        drone=sim.entities[0]
+        old=list(drone.uav.route)
+        with self.assertRaises(ValueError): operations.set_route(sim,drone,[(7,12),(18,12)]*251)
+        self.assertEqual(drone.uav.route,old)
+
+    def test_oversized_save_preserves_existing_file(self):
+        large=to_scene([Entity(i+1,Kind.UAV,i,1,
+                       uav=UavProps(x=i,y=1,route=[(0,0),(1,0)]*250)) for i in range(100)])
+        self.assertGreater(len(json.dumps(large,ensure_ascii=False,indent=2).encode("utf-8")),2_000_000)
+        with tempfile.TemporaryDirectory() as tmp:
+            path=Path(tmp)/"scene.json"
+            initial=lesson_scene(1)
+            save_scene(path,initial)
+            before=path.read_bytes()
+            with self.assertRaises(ValueError): save_scene(path,large)
+            self.assertEqual(path.read_bytes(),before)
+            self.assertEqual(load_scene(path),initial)
+            self.assertEqual(len(list(Path(tmp).iterdir())),1)
+
+
 class TimeAndSceneTests(unittest.TestCase):
     def test_lessons_demonstrate_promised_relationships(self):
         distance=Simulation(lesson_scene(1));distance.advance(1)
