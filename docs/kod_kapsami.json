@@ -1,0 +1,2418 @@
+{
+  "sources": {
+    "CALCULATOR.py": "c19df3dc3b1a368782613b27b635f445eda6581da2659e20bec91f42def97954",
+    "IoT PyGame/iot_sim/.main_yedek.py": "a163e48c4865ffd8c44f81ffeea09fee599937e746fc6c9d57fca06439ad8a5a",
+    "IoT PyGame/iot_sim/main.py": "2ab8cce94429dc109f23371fe4c196933b6d1008eb991a100e014cb6c49ca50e",
+    "iot_sim/IoT.py": "1610150789286866e6bdc871ba83c351a039b58107ade57a0920f8c55637311e",
+    "iot_sim/__init__.py": "037f5aada316ca4e4becdd02cf4536e9a312f4501395b8ac189677c08a9577f0",
+    "iot_sim/alarm_bridge.py": "c9c34a5e6559887c8908d62cc77746f8eee8070585a6ed0ed7ba76c757f9f646",
+    "iot_sim/app.py": "724b573d30513229aa06475a3d8b044c513c08032ad46940a1086a9f7394bcec",
+    "iot_sim/assets.py": "a9d5d69eb3680f8f8ab738ad6c5ff53ae88cebbfc3e6aadd13abe88d0a42a043",
+    "iot_sim/camera.py": "ee31c120d400435509c35c288f24b153836ff5710a3eeb5ccf82260f83562100",
+    "iot_sim/cargo.py": "851cfdb45c3088681550aebafdb65b7dd75cfff4acb4f80114bea7c35317a7ad",
+    "iot_sim/constants.py": "c411eeb98c1f6414a06ed92d9131a4dd48d46d2e41133734eef539df71eedb59",
+    "iot_sim/engine.py": "997aefc3e70f0dcf2b114d53768aa39a329f0419fd8d0edfa673704fc633886b",
+    "iot_sim/exporter.py": "4e0951891de0f72ebbcf66ccf2abddf26dbcd6a3d6282542183089bef519120c",
+    "iot_sim/fire.py": "2bcd7699679d765bdb4bf86ee28fc03af564aa16ebecae59d2ebd47581c79200",
+    "iot_sim/geom.py": "2aa8eb2a6ceeb3a29538bb6777997157b150ec1e283079dfb6d3ac9a626e9255",
+    "iot_sim/graphs.py": "26ba54e70e72bde012538d915828f1c7dc6598e6537c48228e5dfaece134b73d",
+    "iot_sim/lessons.py": "98df01f109a513961edf06013986d6b451f9e17fac66fb0903c2cded404a4fe3",
+    "iot_sim/models.py": "fbaf72e8293f9f6aaf3b25d02f41f1a359a898785d647cf298a4e38a1dfb4b78",
+    "iot_sim/operations.py": "eb6d2efc923ea5c5c65ad57d5e285614885475f360bbeea3d5d2624293619a71",
+    "iot_sim/panel.py": "0de55680adfa5665384c27f739aa318be83a0a630f3a7a325ace98670cdf3499",
+    "iot_sim/render.py": "556c6740d766d2c615597725c82cbab9448407886d8d2478a41bbef496d8ee15",
+    "iot_sim/scene.py": "a5ad84ad9ddd547858392a5ce2c7016ab4ef96aa5bbcfc53ebc708688b87fe7f",
+    "iot_sim/sensors.py": "f4eb81b41eb4f2d511d1658e4d1c4294371d3b1059615097c6b1e7c845d5bb2e",
+    "iot_sim/simulation.py": "33e3924ca76467de6beb77b5c22af3237d77edc8b2cadedd736f41e8d7abcbca",
+    "iot_sim/uav.py": "6a54ae8486d0a5db30ca4cc7855599d25ab1dc8d05e831260ca67aba73b25cc6",
+    "iot_sim/ui_widgets.py": "2e25a52b0f0abdce17a937dd87c22dd02f08bc3ae31e96734ec0fe16f88a4154",
+    "iot_sim/viz.py": "b149d103f9f40289da28dbb0cca22764bd83a2104df75c4d01d69b3dc6145bb5",
+    "main.py": "f73ad4a5268a0622890964ecb9064fdecc85c06bdaf281f3cb9f3d95d05ffe9d",
+    "tests/test_simulation.py": "7c2070984cb111a7462ecbb1348db941972e80a031c20db27e12de18d03b3f93",
+    "tests/test_ui.py": "ceabc97c92d49fba7ee0054fabafdffb5b4dd17c44d68f3b864275df9915ad6d",
+    "tools/build_guide.py": "900bfba38380c272aa264768d3d7700410a9d89e5a65cb821928ff2e747e4b6d",
+    "tools/verify_runtime.py": "bcfcd414e6b5a474a4b506260fe5c19cfa7cf2c82470316ed88715d58847952e"
+  },
+  "symbols": [
+    {
+      "file": "CALCULATOR.py",
+      "name": "Logger",
+      "line": 5,
+      "end": 19,
+      "kind": "ClassDef"
+    },
+    {
+      "file": "CALCULATOR.py",
+      "name": "Logger.__init__",
+      "line": 7,
+      "end": 8,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "CALCULATOR.py",
+      "name": "Logger.Clog",
+      "line": 10,
+      "end": 11,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "CALCULATOR.py",
+      "name": "Logger.Mlog",
+      "line": 13,
+      "end": 16,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "CALCULATOR.py",
+      "name": "Logger.get_records",
+      "line": 18,
+      "end": 19,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "CALCULATOR.py",
+      "name": "RateLimiter",
+      "line": 22,
+      "end": 65,
+      "kind": "ClassDef"
+    },
+    {
+      "file": "CALCULATOR.py",
+      "name": "RateLimiter.__init__",
+      "line": 24,
+      "end": 34,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "CALCULATOR.py",
+      "name": "RateLimiter.remaining",
+      "line": 37,
+      "end": 38,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "CALCULATOR.py",
+      "name": "RateLimiter.remaining",
+      "line": 41,
+      "end": 46,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "CALCULATOR.py",
+      "name": "RateLimiter.allow",
+      "line": 48,
+      "end": 53,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "CALCULATOR.py",
+      "name": "RateLimiter.refresh",
+      "line": 55,
+      "end": 62,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "CALCULATOR.py",
+      "name": "RateLimiter.__call__",
+      "line": 64,
+      "end": 65,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "CALCULATOR.py",
+      "name": "EventType",
+      "line": 68,
+      "end": 70,
+      "kind": "ClassDef"
+    },
+    {
+      "file": "CALCULATOR.py",
+      "name": "SensorKind",
+      "line": 73,
+      "end": 75,
+      "kind": "ClassDef"
+    },
+    {
+      "file": "CALCULATOR.py",
+      "name": "Event",
+      "line": 78,
+      "end": 90,
+      "kind": "ClassDef"
+    },
+    {
+      "file": "CALCULATOR.py",
+      "name": "Event.__init__",
+      "line": 80,
+      "end": 90,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "CALCULATOR.py",
+      "name": "Sensor",
+      "line": 93,
+      "end": 140,
+      "kind": "ClassDef"
+    },
+    {
+      "file": "CALCULATOR.py",
+      "name": "Sensor.__init__",
+      "line": 95,
+      "end": 104,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "CALCULATOR.py",
+      "name": "Sensor.raw",
+      "line": 108,
+      "end": 109,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "CALCULATOR.py",
+      "name": "Sensor.raw",
+      "line": 112,
+      "end": 117,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "CALCULATOR.py",
+      "name": "Sensor.name",
+      "line": 120,
+      "end": 121,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "CALCULATOR.py",
+      "name": "Sensor.name",
+      "line": 124,
+      "end": 127,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "CALCULATOR.py",
+      "name": "Sensor.kind",
+      "line": 130,
+      "end": 131,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "CALCULATOR.py",
+      "name": "Sensor.kind",
+      "line": 134,
+      "end": 137,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "CALCULATOR.py",
+      "name": "Sensor.__repr__",
+      "line": 139,
+      "end": 140,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "CALCULATOR.py",
+      "name": "CalibratedSensor",
+      "line": 143,
+      "end": 188,
+      "kind": "ClassDef"
+    },
+    {
+      "file": "CALCULATOR.py",
+      "name": "CalibratedSensor.__init__",
+      "line": 145,
+      "end": 149,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "CALCULATOR.py",
+      "name": "CalibratedSensor.name",
+      "line": 152,
+      "end": 153,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "CALCULATOR.py",
+      "name": "CalibratedSensor.name",
+      "line": 156,
+      "end": 157,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "CALCULATOR.py",
+      "name": "CalibratedSensor.raw",
+      "line": 160,
+      "end": 161,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "CALCULATOR.py",
+      "name": "CalibratedSensor.raw",
+      "line": 164,
+      "end": 165,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "CALCULATOR.py",
+      "name": "CalibratedSensor.offset",
+      "line": 168,
+      "end": 169,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "CALCULATOR.py",
+      "name": "CalibratedSensor.offset",
+      "line": 172,
+      "end": 177,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "CALCULATOR.py",
+      "name": "CalibratedSensor.value",
+      "line": 180,
+      "end": 181,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "CALCULATOR.py",
+      "name": "CalibratedSensor.kind",
+      "line": 184,
+      "end": 185,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "CALCULATOR.py",
+      "name": "CalibratedSensor.__repr__",
+      "line": 187,
+      "end": 188,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "CALCULATOR.py",
+      "name": "ConsoleNotifier",
+      "line": 192,
+      "end": 201,
+      "kind": "ClassDef"
+    },
+    {
+      "file": "CALCULATOR.py",
+      "name": "ConsoleNotifier.notify",
+      "line": 194,
+      "end": 201,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "CALCULATOR.py",
+      "name": "InMemoryStage",
+      "line": 204,
+      "end": 227,
+      "kind": "ClassDef"
+    },
+    {
+      "file": "CALCULATOR.py",
+      "name": "InMemoryStage.__init__",
+      "line": 205,
+      "end": 206,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "CALCULATOR.py",
+      "name": "InMemoryStage.events",
+      "line": 209,
+      "end": 210,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "CALCULATOR.py",
+      "name": "InMemoryStage.save",
+      "line": 212,
+      "end": 227,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "CALCULATOR.py",
+      "name": "EventEngine",
+      "line": 230,
+      "end": 282,
+      "kind": "ClassDef"
+    },
+    {
+      "file": "CALCULATOR.py",
+      "name": "EventEngine.__init__",
+      "line": 231,
+      "end": 239,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "CALCULATOR.py",
+      "name": "EventEngine._emit",
+      "line": 241,
+      "end": 263,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "CALCULATOR.py",
+      "name": "EventEngine.tick",
+      "line": 265,
+      "end": 282,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "IoT PyGame/iot_sim/.main_yedek.py",
+      "name": "Kind",
+      "line": 48,
+      "end": 53,
+      "kind": "ClassDef"
+    },
+    {
+      "file": "IoT PyGame/iot_sim/.main_yedek.py",
+      "name": "SourceType",
+      "line": 56,
+      "end": 58,
+      "kind": "ClassDef"
+    },
+    {
+      "file": "IoT PyGame/iot_sim/.main_yedek.py",
+      "name": "RouteMode",
+      "line": 61,
+      "end": 63,
+      "kind": "ClassDef"
+    },
+    {
+      "file": "IoT PyGame/iot_sim/.main_yedek.py",
+      "name": "SensorProps",
+      "line": 67,
+      "end": 73,
+      "kind": "ClassDef"
+    },
+    {
+      "file": "IoT PyGame/iot_sim/.main_yedek.py",
+      "name": "SourceProps",
+      "line": 77,
+      "end": 80,
+      "kind": "ClassDef"
+    },
+    {
+      "file": "IoT PyGame/iot_sim/.main_yedek.py",
+      "name": "UavProps",
+      "line": 84,
+      "end": 92,
+      "kind": "ClassDef"
+    },
+    {
+      "file": "IoT PyGame/iot_sim/.main_yedek.py",
+      "name": "Entity",
+      "line": 96,
+      "end": 106,
+      "kind": "ClassDef"
+    },
+    {
+      "file": "IoT PyGame/iot_sim/.main_yedek.py",
+      "name": "clamp",
+      "line": 112,
+      "end": 113,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "IoT PyGame/iot_sim/.main_yedek.py",
+      "name": "accuracy_for_dist",
+      "line": 116,
+      "end": 121,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "IoT PyGame/iot_sim/.main_yedek.py",
+      "name": "tile_occupied",
+      "line": 124,
+      "end": 130,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "IoT PyGame/iot_sim/.main_yedek.py",
+      "name": "find_entity_at",
+      "line": 133,
+      "end": 140,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "IoT PyGame/iot_sim/.main_yedek.py",
+      "name": "find_entity_by_id",
+      "line": 143,
+      "end": 147,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "IoT PyGame/iot_sim/.main_yedek.py",
+      "name": "dist",
+      "line": 150,
+      "end": 151,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "IoT PyGame/iot_sim/.main_yedek.py",
+      "name": "bresenham_tiles",
+      "line": 156,
+      "end": 173,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "IoT PyGame/iot_sim/.main_yedek.py",
+      "name": "route_is_valid",
+      "line": 176,
+      "end": 189,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "IoT PyGame/iot_sim/.main_yedek.py",
+      "name": "spread_fire",
+      "line": 192,
+      "end": 226,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "IoT PyGame/iot_sim/.main_yedek.py",
+      "name": "Camera",
+      "line": 233,
+      "end": 259,
+      "kind": "ClassDef"
+    },
+    {
+      "file": "IoT PyGame/iot_sim/.main_yedek.py",
+      "name": "Camera.__init__",
+      "line": 234,
+      "end": 237,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "IoT PyGame/iot_sim/.main_yedek.py",
+      "name": "Camera.clamp_zoom_for_map",
+      "line": 239,
+      "end": 245,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "IoT PyGame/iot_sim/.main_yedek.py",
+      "name": "Camera.zoom_at",
+      "line": 247,
+      "end": 249,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "IoT PyGame/iot_sim/.main_yedek.py",
+      "name": "Camera.screen_to_world",
+      "line": 251,
+      "end": 259,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "IoT PyGame/iot_sim/.main_yedek.py",
+      "name": "simulate_tick",
+      "line": 265,
+      "end": 333,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "IoT PyGame/iot_sim/.main_yedek.py",
+      "name": "update_uavs",
+      "line": 336,
+      "end": 396,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "IoT PyGame/iot_sim/.main_yedek.py",
+      "name": "draw_button",
+      "line": 402,
+      "end": 412,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "IoT PyGame/iot_sim/.main_yedek.py",
+      "name": "draw_small_btn",
+      "line": 415,
+      "end": 420,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "IoT PyGame/iot_sim/.main_yedek.py",
+      "name": "draw_switch",
+      "line": 423,
+      "end": 437,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "IoT PyGame/iot_sim/.main_yedek.py",
+      "name": "draw_section_title",
+      "line": 440,
+      "end": 442,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "IoT PyGame/iot_sim/.main_yedek.py",
+      "name": "draw_segmented",
+      "line": 445,
+      "end": 461,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "IoT PyGame/iot_sim/.main_yedek.py",
+      "name": "build_panel_layout",
+      "line": 467,
+      "end": 747,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "IoT PyGame/iot_sim/.main_yedek.py",
+      "name": "build_panel_layout.toggle_entity_effect",
+      "line": 504,
+      "end": 505,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "IoT PyGame/iot_sim/.main_yedek.py",
+      "name": "build_panel_layout.add_numeric_row",
+      "line": 520,
+      "end": 530,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "IoT PyGame/iot_sim/.main_yedek.py",
+      "name": "build_panel_layout.set_range",
+      "line": 537,
+      "end": 540,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "IoT PyGame/iot_sim/.main_yedek.py",
+      "name": "build_panel_layout.set_eff",
+      "line": 542,
+      "end": 543,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "IoT PyGame/iot_sim/.main_yedek.py",
+      "name": "build_panel_layout.set_batt",
+      "line": 545,
+      "end": 548,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "IoT PyGame/iot_sim/.main_yedek.py",
+      "name": "build_panel_layout.set_power",
+      "line": 576,
+      "end": 577,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "IoT PyGame/iot_sim/.main_yedek.py",
+      "name": "build_panel_layout.set_srange",
+      "line": 579,
+      "end": 580,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "IoT PyGame/iot_sim/.main_yedek.py",
+      "name": "build_panel_layout.set_power",
+      "line": 595,
+      "end": 596,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "IoT PyGame/iot_sim/.main_yedek.py",
+      "name": "build_panel_layout.set_srange",
+      "line": 598,
+      "end": 599,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "IoT PyGame/iot_sim/.main_yedek.py",
+      "name": "build_panel_layout.set_speed",
+      "line": 616,
+      "end": 617,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "IoT PyGame/iot_sim/.main_yedek.py",
+      "name": "build_panel_layout.toggle_mode",
+      "line": 628,
+      "end": 630,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "IoT PyGame/iot_sim/.main_yedek.py",
+      "name": "build_panel_layout.clear_cargo",
+      "line": 651,
+      "end": 657,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "IoT PyGame/iot_sim/.main_yedek.py",
+      "name": "build_panel_layout._toggle_cargo",
+      "line": 685,
+      "end": 689,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "IoT PyGame/iot_sim/.main_yedek.py",
+      "name": "build_panel_layout.set_power2",
+      "line": 699,
+      "end": 700,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "IoT PyGame/iot_sim/.main_yedek.py",
+      "name": "build_panel_layout.set_srange2",
+      "line": 701,
+      "end": 702,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "IoT PyGame/iot_sim/.main_yedek.py",
+      "name": "build_panel_layout.set_range2",
+      "line": 713,
+      "end": 716,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "IoT PyGame/iot_sim/.main_yedek.py",
+      "name": "build_panel_layout.set_eff2",
+      "line": 717,
+      "end": 718,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "IoT PyGame/iot_sim/.main_yedek.py",
+      "name": "load_icon",
+      "line": 753,
+      "end": 757,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "IoT PyGame/iot_sim/.main_yedek.py",
+      "name": "get_scaled_icon",
+      "line": 760,
+      "end": 767,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "IoT PyGame/iot_sim/.main_yedek.py",
+      "name": "draw_dashed_circle",
+      "line": 773,
+      "end": 790,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "IoT PyGame/iot_sim/.main_yedek.py",
+      "name": "make_gauss_field_surface",
+      "line": 793,
+      "end": 820,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "IoT PyGame/iot_sim/.main_yedek.py",
+      "name": "draw_route_overlay",
+      "line": 827,
+      "end": 857,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "IoT PyGame/iot_sim/.main_yedek.py",
+      "name": "draw_route_overlay.world_to_screen",
+      "line": 839,
+      "end": 842,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "IoT PyGame/iot_sim/.main_yedek.py",
+      "name": "draw_world",
+      "line": 860,
+      "end": 1046,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "IoT PyGame/iot_sim/.main_yedek.py",
+      "name": "draw_world.world_to_screen",
+      "line": 872,
+      "end": 875,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "IoT PyGame/iot_sim/.main_yedek.py",
+      "name": "can_attach_to_uav",
+      "line": 1052,
+      "end": 1080,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "IoT PyGame/iot_sim/.main_yedek.py",
+      "name": "attach_to_uav",
+      "line": 1083,
+      "end": 1093,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "IoT PyGame/iot_sim/.main_yedek.py",
+      "name": "main",
+      "line": 1099,
+      "end": 1702,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "IoT PyGame/iot_sim/.main_yedek.py",
+      "name": "main.push_msg",
+      "line": 1171,
+      "end": 1174,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "IoT PyGame/iot_sim/.main_yedek.py",
+      "name": "main._toggle_global",
+      "line": 1217,
+      "end": 1219,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "IoT PyGame/iot_sim/main.py",
+      "name": "Kind",
+      "line": 48,
+      "end": 53,
+      "kind": "ClassDef"
+    },
+    {
+      "file": "IoT PyGame/iot_sim/main.py",
+      "name": "SourceType",
+      "line": 56,
+      "end": 58,
+      "kind": "ClassDef"
+    },
+    {
+      "file": "IoT PyGame/iot_sim/main.py",
+      "name": "RouteMode",
+      "line": 61,
+      "end": 63,
+      "kind": "ClassDef"
+    },
+    {
+      "file": "IoT PyGame/iot_sim/main.py",
+      "name": "SensorProps",
+      "line": 67,
+      "end": 73,
+      "kind": "ClassDef"
+    },
+    {
+      "file": "IoT PyGame/iot_sim/main.py",
+      "name": "SourceProps",
+      "line": 77,
+      "end": 80,
+      "kind": "ClassDef"
+    },
+    {
+      "file": "IoT PyGame/iot_sim/main.py",
+      "name": "UavProps",
+      "line": 84,
+      "end": 93,
+      "kind": "ClassDef"
+    },
+    {
+      "file": "IoT PyGame/iot_sim/main.py",
+      "name": "Entity",
+      "line": 97,
+      "end": 107,
+      "kind": "ClassDef"
+    },
+    {
+      "file": "IoT PyGame/iot_sim/main.py",
+      "name": "clamp",
+      "line": 113,
+      "end": 114,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "IoT PyGame/iot_sim/main.py",
+      "name": "accuracy_for_dist",
+      "line": 117,
+      "end": 122,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "IoT PyGame/iot_sim/main.py",
+      "name": "tile_occupied",
+      "line": 125,
+      "end": 131,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "IoT PyGame/iot_sim/main.py",
+      "name": "find_entity_at",
+      "line": 134,
+      "end": 141,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "IoT PyGame/iot_sim/main.py",
+      "name": "find_entity_by_id",
+      "line": 144,
+      "end": 148,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "IoT PyGame/iot_sim/main.py",
+      "name": "dist",
+      "line": 151,
+      "end": 152,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "IoT PyGame/iot_sim/main.py",
+      "name": "bresenham_tiles",
+      "line": 157,
+      "end": 174,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "IoT PyGame/iot_sim/main.py",
+      "name": "route_is_valid",
+      "line": 177,
+      "end": 190,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "IoT PyGame/iot_sim/main.py",
+      "name": "spread_fire",
+      "line": 193,
+      "end": 227,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "IoT PyGame/iot_sim/main.py",
+      "name": "Camera",
+      "line": 234,
+      "end": 260,
+      "kind": "ClassDef"
+    },
+    {
+      "file": "IoT PyGame/iot_sim/main.py",
+      "name": "Camera.__init__",
+      "line": 235,
+      "end": 238,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "IoT PyGame/iot_sim/main.py",
+      "name": "Camera.clamp_zoom_for_map",
+      "line": 240,
+      "end": 246,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "IoT PyGame/iot_sim/main.py",
+      "name": "Camera.zoom_at",
+      "line": 248,
+      "end": 250,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "IoT PyGame/iot_sim/main.py",
+      "name": "Camera.screen_to_world",
+      "line": 252,
+      "end": 260,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "IoT PyGame/iot_sim/main.py",
+      "name": "simulate_tick",
+      "line": 266,
+      "end": 334,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "IoT PyGame/iot_sim/main.py",
+      "name": "update_uavs",
+      "line": 337,
+      "end": 397,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "IoT PyGame/iot_sim/main.py",
+      "name": "draw_button",
+      "line": 403,
+      "end": 413,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "IoT PyGame/iot_sim/main.py",
+      "name": "draw_small_btn",
+      "line": 416,
+      "end": 421,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "IoT PyGame/iot_sim/main.py",
+      "name": "draw_switch",
+      "line": 424,
+      "end": 438,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "IoT PyGame/iot_sim/main.py",
+      "name": "draw_section_title",
+      "line": 441,
+      "end": 443,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "IoT PyGame/iot_sim/main.py",
+      "name": "draw_segmented",
+      "line": 446,
+      "end": 462,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "IoT PyGame/iot_sim/main.py",
+      "name": "build_panel_layout",
+      "line": 468,
+      "end": 758,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "IoT PyGame/iot_sim/main.py",
+      "name": "build_panel_layout.toggle_entity_effect",
+      "line": 505,
+      "end": 506,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "IoT PyGame/iot_sim/main.py",
+      "name": "build_panel_layout.add_numeric_row",
+      "line": 521,
+      "end": 531,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "IoT PyGame/iot_sim/main.py",
+      "name": "build_panel_layout.set_range",
+      "line": 538,
+      "end": 541,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "IoT PyGame/iot_sim/main.py",
+      "name": "build_panel_layout.set_eff",
+      "line": 543,
+      "end": 544,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "IoT PyGame/iot_sim/main.py",
+      "name": "build_panel_layout.set_batt",
+      "line": 546,
+      "end": 549,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "IoT PyGame/iot_sim/main.py",
+      "name": "build_panel_layout.set_power",
+      "line": 577,
+      "end": 578,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "IoT PyGame/iot_sim/main.py",
+      "name": "build_panel_layout.set_srange",
+      "line": 580,
+      "end": 581,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "IoT PyGame/iot_sim/main.py",
+      "name": "build_panel_layout.set_power",
+      "line": 596,
+      "end": 597,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "IoT PyGame/iot_sim/main.py",
+      "name": "build_panel_layout.set_srange",
+      "line": 599,
+      "end": 600,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "IoT PyGame/iot_sim/main.py",
+      "name": "build_panel_layout.set_speed",
+      "line": 617,
+      "end": 618,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "IoT PyGame/iot_sim/main.py",
+      "name": "build_panel_layout.toggle_route",
+      "line": 629,
+      "end": 630,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "IoT PyGame/iot_sim/main.py",
+      "name": "build_panel_layout.toggle_mode",
+      "line": 639,
+      "end": 641,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "IoT PyGame/iot_sim/main.py",
+      "name": "build_panel_layout.clear_cargo",
+      "line": 662,
+      "end": 668,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "IoT PyGame/iot_sim/main.py",
+      "name": "build_panel_layout._toggle_cargo",
+      "line": 696,
+      "end": 700,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "IoT PyGame/iot_sim/main.py",
+      "name": "build_panel_layout.set_power2",
+      "line": 710,
+      "end": 711,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "IoT PyGame/iot_sim/main.py",
+      "name": "build_panel_layout.set_srange2",
+      "line": 712,
+      "end": 713,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "IoT PyGame/iot_sim/main.py",
+      "name": "build_panel_layout.set_range2",
+      "line": 724,
+      "end": 727,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "IoT PyGame/iot_sim/main.py",
+      "name": "build_panel_layout.set_eff2",
+      "line": 728,
+      "end": 729,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "IoT PyGame/iot_sim/main.py",
+      "name": "load_icon",
+      "line": 764,
+      "end": 768,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "IoT PyGame/iot_sim/main.py",
+      "name": "get_scaled_icon",
+      "line": 771,
+      "end": 778,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "IoT PyGame/iot_sim/main.py",
+      "name": "draw_dashed_circle",
+      "line": 784,
+      "end": 801,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "IoT PyGame/iot_sim/main.py",
+      "name": "make_gauss_field_surface",
+      "line": 804,
+      "end": 831,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "IoT PyGame/iot_sim/main.py",
+      "name": "draw_route_overlay",
+      "line": 838,
+      "end": 868,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "IoT PyGame/iot_sim/main.py",
+      "name": "draw_route_overlay.world_to_screen",
+      "line": 850,
+      "end": 853,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "IoT PyGame/iot_sim/main.py",
+      "name": "draw_world",
+      "line": 871,
+      "end": 1070,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "IoT PyGame/iot_sim/main.py",
+      "name": "draw_world.world_to_screen",
+      "line": 883,
+      "end": 886,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "IoT PyGame/iot_sim/main.py",
+      "name": "can_attach_to_uav",
+      "line": 1076,
+      "end": 1104,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "IoT PyGame/iot_sim/main.py",
+      "name": "attach_to_uav",
+      "line": 1107,
+      "end": 1117,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "IoT PyGame/iot_sim/main.py",
+      "name": "main",
+      "line": 1123,
+      "end": 1726,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "IoT PyGame/iot_sim/main.py",
+      "name": "main.push_msg",
+      "line": 1195,
+      "end": 1198,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "IoT PyGame/iot_sim/main.py",
+      "name": "main._toggle_global",
+      "line": 1241,
+      "end": 1243,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "iot_sim/alarm_bridge.py",
+      "name": "AlarmBridge",
+      "line": 10,
+      "end": 117,
+      "kind": "ClassDef"
+    },
+    {
+      "file": "iot_sim/alarm_bridge.py",
+      "name": "AlarmBridge.__init__",
+      "line": 12,
+      "end": 25,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "iot_sim/alarm_bridge.py",
+      "name": "AlarmBridge._emit",
+      "line": 27,
+      "end": 36,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "iot_sim/alarm_bridge.py",
+      "name": "AlarmBridge.update",
+      "line": 38,
+      "end": 101,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "iot_sim/alarm_bridge.py",
+      "name": "AlarmBridge.alert_count",
+      "line": 104,
+      "end": 105,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "iot_sim/alarm_bridge.py",
+      "name": "AlarmBridge.log_lines",
+      "line": 108,
+      "end": 110,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "iot_sim/alarm_bridge.py",
+      "name": "AlarmBridge.get_sensor_status",
+      "line": 112,
+      "end": 113,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "iot_sim/alarm_bridge.py",
+      "name": "AlarmBridge.get_limiter_info",
+      "line": 115,
+      "end": 117,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "iot_sim/app.py",
+      "name": "App",
+      "line": 23,
+      "end": 479,
+      "kind": "ClassDef"
+    },
+    {
+      "file": "iot_sim/app.py",
+      "name": "App.__init__",
+      "line": 25,
+      "end": 64,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "iot_sim/app.py",
+      "name": "App.selected",
+      "line": 67,
+      "end": 68,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "iot_sim/app.py",
+      "name": "App.focus_scene",
+      "line": 70,
+      "end": 73,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "iot_sim/app.py",
+      "name": "App.message",
+      "line": 75,
+      "end": 77,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "iot_sim/app.py",
+      "name": "App.btn",
+      "line": 79,
+      "end": 83,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "iot_sim/app.py",
+      "name": "App.layout",
+      "line": 85,
+      "end": 93,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "iot_sim/app.py",
+      "name": "App.draw",
+      "line": 95,
+      "end": 175,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "iot_sim/app.py",
+      "name": "App.begin_recording",
+      "line": 177,
+      "end": 183,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "iot_sim/app.py",
+      "name": "App.close_recording",
+      "line": 185,
+      "end": 189,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "iot_sim/app.py",
+      "name": "App.change",
+      "line": 191,
+      "end": 197,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "iot_sim/app.py",
+      "name": "App.replace_sim",
+      "line": 199,
+      "end": 210,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "iot_sim/app.py",
+      "name": "App.prompt",
+      "line": 212,
+      "end": 215,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "iot_sim/app.py",
+      "name": "App.submit",
+      "line": 217,
+      "end": 238,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "iot_sim/app.py",
+      "name": "App.action",
+      "line": 240,
+      "end": 361,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "iot_sim/app.py",
+      "name": "App.map_click",
+      "line": 363,
+      "end": 390,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "iot_sim/app.py",
+      "name": "App.process_event",
+      "line": 392,
+      "end": 466,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "iot_sim/app.py",
+      "name": "App.run",
+      "line": 468,
+      "end": 479,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "iot_sim/app.py",
+      "name": "main",
+      "line": 482,
+      "end": 500,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "iot_sim/assets.py",
+      "name": "load_icon",
+      "line": 4,
+      "end": 8,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "iot_sim/assets.py",
+      "name": "get_scaled_icon",
+      "line": 11,
+      "end": 20,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "iot_sim/camera.py",
+      "name": "Camera",
+      "line": 6,
+      "end": 23,
+      "kind": "ClassDef"
+    },
+    {
+      "file": "iot_sim/camera.py",
+      "name": "Camera.__init__",
+      "line": 7,
+      "end": 9,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "iot_sim/camera.py",
+      "name": "Camera.world_to_screen",
+      "line": 11,
+      "end": 13,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "iot_sim/camera.py",
+      "name": "Camera.screen_to_world",
+      "line": 15,
+      "end": 17,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "iot_sim/camera.py",
+      "name": "Camera.zoom_at",
+      "line": 19,
+      "end": 20,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "iot_sim/camera.py",
+      "name": "Camera.clamp_zoom_for_map",
+      "line": 22,
+      "end": 23,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "iot_sim/cargo.py",
+      "name": "can_attach_to_uav",
+      "line": 5,
+      "end": 31,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "iot_sim/cargo.py",
+      "name": "attach_to_uav",
+      "line": 34,
+      "end": 45,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "iot_sim/engine.py",
+      "name": "clamp",
+      "line": 8,
+      "end": 9,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "iot_sim/engine.py",
+      "name": "accuracy_for_dist",
+      "line": 11,
+      "end": 16,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "iot_sim/engine.py",
+      "name": "tile_occupied",
+      "line": 18,
+      "end": 24,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "iot_sim/engine.py",
+      "name": "find_entity_at",
+      "line": 26,
+      "end": 33,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "iot_sim/engine.py",
+      "name": "find_entity_by_id",
+      "line": 35,
+      "end": 39,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "iot_sim/engine.py",
+      "name": "build_entity_index",
+      "line": 41,
+      "end": 43,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "iot_sim/engine.py",
+      "name": "dist",
+      "line": 45,
+      "end": 46,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "iot_sim/engine.py",
+      "name": "bresenham_tiles",
+      "line": 49,
+      "end": 66,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "iot_sim/engine.py",
+      "name": "route_is_valid",
+      "line": 68,
+      "end": 78,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "iot_sim/exporter.py",
+      "name": "Exporter",
+      "line": 14,
+      "end": 84,
+      "kind": "ClassDef"
+    },
+    {
+      "file": "iot_sim/exporter.py",
+      "name": "Exporter.__init__",
+      "line": 15,
+      "end": 37,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "iot_sim/exporter.py",
+      "name": "Exporter._writer",
+      "line": 39,
+      "end": 44,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "iot_sim/exporter.py",
+      "name": "Exporter.log_sensor",
+      "line": 46,
+      "end": 58,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "iot_sim/exporter.py",
+      "name": "Exporter.log_event",
+      "line": 60,
+      "end": 62,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "iot_sim/exporter.py",
+      "name": "Exporter.log_change",
+      "line": 64,
+      "end": 67,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "iot_sim/exporter.py",
+      "name": "Exporter.flush",
+      "line": 69,
+      "end": 72,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "iot_sim/exporter.py",
+      "name": "Exporter.close",
+      "line": 74,
+      "end": 78,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "iot_sim/exporter.py",
+      "name": "Exporter.__enter__",
+      "line": 80,
+      "end": 81,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "iot_sim/exporter.py",
+      "name": "Exporter.__exit__",
+      "line": 83,
+      "end": 84,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "iot_sim/fire.py",
+      "name": "spread_fire",
+      "line": 6,
+      "end": 20,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "iot_sim/geom.py",
+      "name": "order_polygon_points",
+      "line": 7,
+      "end": 13,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "iot_sim/geom.py",
+      "name": "polygon_area",
+      "line": 15,
+      "end": 25,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "iot_sim/graphs.py",
+      "name": "draw_graph",
+      "line": 6,
+      "end": 59,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "iot_sim/graphs.py",
+      "name": "draw_graph.point",
+      "line": 30,
+      "end": 31,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "iot_sim/lessons.py",
+      "name": "lesson_scene",
+      "line": 39,
+      "end": 74,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "iot_sim/lessons.py",
+      "name": "lesson_scene.sensor",
+      "line": 43,
+      "end": 45,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "iot_sim/models.py",
+      "name": "Kind",
+      "line": 5,
+      "end": 10,
+      "kind": "ClassDef"
+    },
+    {
+      "file": "iot_sim/models.py",
+      "name": "SourceType",
+      "line": 13,
+      "end": 15,
+      "kind": "ClassDef"
+    },
+    {
+      "file": "iot_sim/models.py",
+      "name": "GasMode",
+      "line": 18,
+      "end": 21,
+      "kind": "ClassDef"
+    },
+    {
+      "file": "iot_sim/models.py",
+      "name": "SensorMode",
+      "line": 24,
+      "end": 28,
+      "kind": "ClassDef"
+    },
+    {
+      "file": "iot_sim/models.py",
+      "name": "RouteMode",
+      "line": 31,
+      "end": 33,
+      "kind": "ClassDef"
+    },
+    {
+      "file": "iot_sim/models.py",
+      "name": "SensorProps",
+      "line": 54,
+      "end": 90,
+      "kind": "ClassDef"
+    },
+    {
+      "file": "iot_sim/models.py",
+      "name": "SourceProps",
+      "line": 94,
+      "end": 111,
+      "kind": "ClassDef"
+    },
+    {
+      "file": "iot_sim/models.py",
+      "name": "UavProps",
+      "line": 115,
+      "end": 125,
+      "kind": "ClassDef"
+    },
+    {
+      "file": "iot_sim/models.py",
+      "name": "Entity",
+      "line": 129,
+      "end": 150,
+      "kind": "ClassDef"
+    },
+    {
+      "file": "iot_sim/models.py",
+      "name": "Entity.display_name",
+      "line": 147,
+      "end": 150,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "iot_sim/operations.py",
+      "name": "add_entity",
+      "line": 8,
+      "end": 21,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "iot_sim/operations.py",
+      "name": "move_entity",
+      "line": 24,
+      "end": 35,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "iot_sim/operations.py",
+      "name": "release_cargo",
+      "line": 38,
+      "end": 54,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "iot_sim/operations.py",
+      "name": "delete_entity",
+      "line": 57,
+      "end": 70,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "iot_sim/operations.py",
+      "name": "set_route",
+      "line": 73,
+      "end": 82,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "iot_sim/operations.py",
+      "name": "attach",
+      "line": 85,
+      "end": 90,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "iot_sim/panel.py",
+      "name": "Inspector",
+      "line": 10,
+      "end": 159,
+      "kind": "ClassDef"
+    },
+    {
+      "file": "iot_sim/panel.py",
+      "name": "Inspector.__init__",
+      "line": 12,
+      "end": 14,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "iot_sim/panel.py",
+      "name": "Inspector.draw",
+      "line": 16,
+      "end": 159,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "iot_sim/panel.py",
+      "name": "Inspector.draw.text",
+      "line": 27,
+      "end": 29,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "iot_sim/panel.py",
+      "name": "Inspector.draw.heading",
+      "line": 30,
+      "end": 32,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "iot_sim/panel.py",
+      "name": "Inspector.draw.btn",
+      "line": 33,
+      "end": 37,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "iot_sim/panel.py",
+      "name": "Inspector.draw.numeric",
+      "line": 38,
+      "end": 45,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "iot_sim/render.py",
+      "name": "draw_world",
+      "line": 15,
+      "end": 97,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "iot_sim/render.py",
+      "name": "draw_world.build_overlay",
+      "line": 26,
+      "end": 39,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "iot_sim/scene.py",
+      "name": "encode",
+      "line": 18,
+      "end": 25,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "iot_sim/scene.py",
+      "name": "to_scene",
+      "line": 28,
+      "end": 42,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "iot_sim/scene.py",
+      "name": "number",
+      "line": 45,
+      "end": 51,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "iot_sim/scene.py",
+      "name": "boolean",
+      "line": 54,
+      "end": 57,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "iot_sim/scene.py",
+      "name": "object_fields",
+      "line": 60,
+      "end": 63,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "iot_sim/scene.py",
+      "name": "parse_scene",
+      "line": 66,
+      "end": 191,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "iot_sim/scene.py",
+      "name": "load_scene",
+      "line": 194,
+      "end": 200,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "iot_sim/scene.py",
+      "name": "save_scene",
+      "line": 203,
+      "end": 218,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "iot_sim/sensors.py",
+      "name": "position",
+      "line": 10,
+      "end": 15,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "iot_sim/sensors.py",
+      "name": "field_at",
+      "line": 18,
+      "end": 35,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "iot_sim/sensors.py",
+      "name": "invalidate",
+      "line": 38,
+      "end": 45,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "iot_sim/sensors.py",
+      "name": "simulate_tick",
+      "line": 48,
+      "end": 91,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "iot_sim/simulation.py",
+      "name": "Simulation",
+      "line": 14,
+      "end": 74,
+      "kind": "ClassDef"
+    },
+    {
+      "file": "iot_sim/simulation.py",
+      "name": "Simulation.__init__",
+      "line": 15,
+      "end": 29,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "iot_sim/simulation.py",
+      "name": "Simulation.time",
+      "line": 32,
+      "end": 33,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "iot_sim/simulation.py",
+      "name": "Simulation.snapshot",
+      "line": 35,
+      "end": 36,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "iot_sim/simulation.py",
+      "name": "Simulation._event",
+      "line": 38,
+      "end": 40,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "iot_sim/simulation.py",
+      "name": "Simulation.start_recording",
+      "line": 42,
+      "end": 45,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "iot_sim/simulation.py",
+      "name": "Simulation.advance",
+      "line": 47,
+      "end": 70,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "iot_sim/simulation.py",
+      "name": "Simulation.reset",
+      "line": 72,
+      "end": 74,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "iot_sim/uav.py",
+      "name": "sync_cargo",
+      "line": 7,
+      "end": 12,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "iot_sim/uav.py",
+      "name": "update_uavs",
+      "line": 15,
+      "end": 57,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "iot_sim/ui_widgets.py",
+      "name": "wrap_text",
+      "line": 12,
+      "end": 31,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "iot_sim/ui_widgets.py",
+      "name": "text_block",
+      "line": 34,
+      "end": 39,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "iot_sim/ui_widgets.py",
+      "name": "button",
+      "line": 42,
+      "end": 51,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "iot_sim/viz.py",
+      "name": "EffectCache",
+      "line": 6,
+      "end": 24,
+      "kind": "ClassDef"
+    },
+    {
+      "file": "iot_sim/viz.py",
+      "name": "EffectCache.__init__",
+      "line": 7,
+      "end": 10,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "iot_sim/viz.py",
+      "name": "EffectCache.get",
+      "line": 12,
+      "end": 24,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "iot_sim/viz.py",
+      "name": "field_overlay",
+      "line": 27,
+      "end": 35,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "tests/test_simulation.py",
+      "name": "MeasurementTests",
+      "line": 22,
+      "end": 66,
+      "kind": "ClassDef"
+    },
+    {
+      "file": "tests/test_simulation.py",
+      "name": "MeasurementTests.test_point_measurement_has_no_distance_cutoff",
+      "line": 23,
+      "end": 33,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "tests/test_simulation.py",
+      "name": "MeasurementTests.test_channels_and_calibration",
+      "line": 35,
+      "end": 40,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "tests/test_simulation.py",
+      "name": "MeasurementTests.test_energy_frequency_and_channels",
+      "line": 42,
+      "end": 50,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "tests/test_simulation.py",
+      "name": "MeasurementTests.test_empty_and_off_are_not_zero_normal",
+      "line": 52,
+      "end": 59,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "tests/test_simulation.py",
+      "name": "MeasurementTests.test_carried_sensor_is_logged_and_alerts",
+      "line": 61,
+      "end": 66,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "tests/test_simulation.py",
+      "name": "AlarmTests",
+      "line": 69,
+      "end": 121,
+      "kind": "ClassDef"
+    },
+    {
+      "file": "tests/test_simulation.py",
+      "name": "AlarmTests.make",
+      "line": 70,
+      "end": 73,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "tests/test_simulation.py",
+      "name": "AlarmTests.test_all_threshold_boundaries_agree",
+      "line": 75,
+      "end": 84,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "tests/test_simulation.py",
+      "name": "AlarmTests.test_hysteresis_and_transition_only",
+      "line": 86,
+      "end": 98,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "tests/test_simulation.py",
+      "name": "AlarmTests.test_zero_repeat_quota_preserves_measurements_events",
+      "line": 100,
+      "end": 113,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "tests/test_simulation.py",
+      "name": "AlarmTests.test_removed_sensor_state_is_pruned",
+      "line": 115,
+      "end": 121,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "tests/test_simulation.py",
+      "name": "DroneTests",
+      "line": 124,
+      "end": 171,
+      "kind": "ClassDef"
+    },
+    {
+      "file": "tests/test_simulation.py",
+      "name": "DroneTests.sim",
+      "line": 125,
+      "end": 126,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "tests/test_simulation.py",
+      "name": "DroneTests.test_degenerate_route_returns",
+      "line": 128,
+      "end": 132,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "tests/test_simulation.py",
+      "name": "DroneTests.test_loop_closure_and_approach",
+      "line": 134,
+      "end": 143,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "tests/test_simulation.py",
+      "name": "DroneTests.test_move_and_delete_keep_cargo_consistent",
+      "line": 145,
+      "end": 154,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "tests/test_simulation.py",
+      "name": "DroneTests.test_release_is_atomic_when_full",
+      "line": 156,
+      "end": 163,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "tests/test_simulation.py",
+      "name": "DroneTests.test_capacity_and_mixed_load",
+      "line": 165,
+      "end": 171,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "tests/test_simulation.py",
+      "name": "TimeAndSceneTests",
+      "line": 174,
+      "end": 245,
+      "kind": "ClassDef"
+    },
+    {
+      "file": "tests/test_simulation.py",
+      "name": "TimeAndSceneTests.test_lessons_demonstrate_promised_relationships",
+      "line": 175,
+      "end": 198,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "tests/test_simulation.py",
+      "name": "TimeAndSceneTests.test_scene_can_capture_drone_crossing_ground_sensor",
+      "line": 200,
+      "end": 204,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "tests/test_simulation.py",
+      "name": "TimeAndSceneTests.test_frame_partition_and_seed_reproduce_all_history",
+      "line": 206,
+      "end": 214,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "tests/test_simulation.py",
+      "name": "TimeAndSceneTests.test_all_lessons_roundtrip",
+      "line": 216,
+      "end": 224,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "tests/test_simulation.py",
+      "name": "TimeAndSceneTests.test_reject_corrupt_scene_without_mutation",
+      "line": 226,
+      "end": 237,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "tests/test_simulation.py",
+      "name": "TimeAndSceneTests.test_speed_and_interval_partition",
+      "line": 239,
+      "end": 245,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "tests/test_simulation.py",
+      "name": "ExportAndFireTests",
+      "line": 248,
+      "end": 292,
+      "kind": "ClassDef"
+    },
+    {
+      "file": "tests/test_simulation.py",
+      "name": "ExportAndFireTests.test_unique_sessions_complete_data_and_metadata",
+      "line": 249,
+      "end": 262,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "tests/test_simulation.py",
+      "name": "ExportAndFireTests.test_invalid_measurements_are_blank",
+      "line": 264,
+      "end": 271,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "tests/test_simulation.py",
+      "name": "ExportAndFireTests.test_exception_closes_files",
+      "line": 273,
+      "end": 278,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "tests/test_simulation.py",
+      "name": "ExportAndFireTests.test_ignition_needs_heat_time_and_flammability",
+      "line": 280,
+      "end": 286,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "tests/test_simulation.py",
+      "name": "ExportAndFireTests.test_cool_source_does_not_ignite",
+      "line": 288,
+      "end": 292,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "tests/test_ui.py",
+      "name": "UITests",
+      "line": 20,
+      "end": 191,
+      "kind": "ClassDef"
+    },
+    {
+      "file": "tests/test_ui.py",
+      "name": "UITests.setUp",
+      "line": 21,
+      "end": 25,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "tests/test_ui.py",
+      "name": "UITests.tearDown",
+      "line": 27,
+      "end": 30,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "tests/test_ui.py",
+      "name": "UITests.click",
+      "line": 32,
+      "end": 41,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "tests/test_ui.py",
+      "name": "UITests.mapclick",
+      "line": 43,
+      "end": 47,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "tests/test_ui.py",
+      "name": "UITests.key",
+      "line": 49,
+      "end": 50,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "tests/test_ui.py",
+      "name": "UITests.test_all_lessons_graphs_and_resizing",
+      "line": 52,
+      "end": 65,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "tests/test_ui.py",
+      "name": "UITests.test_editor_and_actual_event_coordinates",
+      "line": 67,
+      "end": 82,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "tests/test_ui.py",
+      "name": "UITests.test_right_click_and_del_both_release",
+      "line": 84,
+      "end": 96,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "tests/test_ui.py",
+      "name": "UITests.test_drag_drop_sensor_to_drone_panel",
+      "line": 98,
+      "end": 109,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "tests/test_ui.py",
+      "name": "UITests.test_route_keyboard_and_cancel",
+      "line": 111,
+      "end": 124,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "tests/test_ui.py",
+      "name": "UITests.test_save_load_seed_invalid_load_preserves_scene",
+      "line": 126,
+      "end": 147,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "tests/test_ui.py",
+      "name": "UITests.test_panel_controls_and_filters",
+      "line": 149,
+      "end": 163,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "tests/test_ui.py",
+      "name": "UITests.test_source_fire_and_alarm_controls",
+      "line": 165,
+      "end": 184,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "tests/test_ui.py",
+      "name": "UITests.test_exception_path_closes_exporter",
+      "line": 186,
+      "end": 191,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "tools/build_guide.py",
+      "name": "source_files",
+      "line": 134,
+      "end": 138,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "tools/build_guide.py",
+      "name": "role",
+      "line": 141,
+      "end": 150,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "tools/build_guide.py",
+      "name": "symbols",
+      "line": 153,
+      "end": 161,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "tools/build_guide.py",
+      "name": "local_nodes",
+      "line": 164,
+      "end": 170,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "tools/build_guide.py",
+      "name": "short",
+      "line": 173,
+      "end": 175,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "tools/build_guide.py",
+      "name": "purpose",
+      "line": 178,
+      "end": 198,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "tools/build_guide.py",
+      "name": "step_description",
+      "line": 201,
+      "end": 229,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "tools/build_guide.py",
+      "name": "render",
+      "line": 232,
+      "end": 294,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "tools/build_guide.py",
+      "name": "main",
+      "line": 297,
+      "end": 310,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "tools/verify_runtime.py",
+      "name": "benchmark_scene",
+      "line": 24,
+      "end": 36,
+      "kind": "FunctionDef"
+    },
+    {
+      "file": "tools/verify_runtime.py",
+      "name": "main",
+      "line": 39,
+      "end": 95,
+      "kind": "FunctionDef"
+    }
+  ]
+}

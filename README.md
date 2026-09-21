@@ -1,140 +1,83 @@
-# IoT Grid Simulator
+# IoT Deney Atölyesi
 
-Pygame tabanlı, gerçek zamanlı bir IoT sensör ağı simülasyonu. Sıcaklık ve gaz kaynaklarını haritaya yerleştirin, sensörlerle izleyin, drone'larla taşıyın ve alarm sistemini canlı takip edin.
+Python/Pygame ile çalışan, Türkçe **öğretici sensör ve drone deney ortamı**. Kaynak yerleştir, ölçüm ile teorik değeri karşılaştır, alarm eşiklerini değiştir, pili gözle ve drone ile hareketli ölçüm yap.
 
-![Python](https://img.shields.io/badge/Python-3.10%2B-blue)
-![Pygame](https://img.shields.io/badge/Pygame-2.x-green)
-![License](https://img.shields.io/badge/License-MIT-yellow)
+![Deney Atölyesi](docs/screenshots/deney-atolyesi.png)
 
-## Özellikler
+## Başla
 
-### Simülasyon Ortamı
-- **200×200 tile grid** harita, zoom ve pan desteği
-- Gerçek zamanlı fizik: sıcaklık yayılımı (°C), gaz difüzyonu (ppm)
-- Yangın yayılım modeli (engeller tutuşabilir)
-- ±%5 ölçüm gürültüsü ile gerçekçi sensör davranışı
-
-### Sensör Sistemi
-- **4 bağımsız ölçüm modu**: TEMP, CO, CO2, H2
-- Çoklu mod seçimi — sadece aktif modlar ölçüm yapar ve limiter hakkı tüketir
-- Gerçek dünya eşik değerleri (CO: 35 ppm OSHA TWA, CO2: 5000 ppm, H2: 4000 ppm, Sıcaklık: 60°C)
-- Pil tüketim modeli, verimlilik ayarı, menzil kontrolü
-- Sensör bazlı rate limiter (limit / max_limit panelden ayarlanabilir)
-
-### Kaynak Sistemi
-- **Sıcaklık kaynakları**: Merkez sıcaklık (°C) ayarlanabilir, mesafeyle üstel düşüş
-- **Gaz kaynakları**: CO, CO2, H2 modları bağımsız açılıp kapatılabilir
-  - Her gaz için ayrı konsantrasyon (ppm) ve menzil (tile) ayarı
-  - Mod seçilmezse yayılım sıfır
-  - Gaz tipine göre farklı efekt renkleri (CO: kırmızı, CO2: yeşil, H2: mavi)
-
-### Alarm Sistemi (CALCULATOR Entegrasyonu)
-- `CALCULATOR.py` modülü ile olay değerlendirme motoru
-- Her sensöre özel `RateLimiter` — bağımsız işlem hakkı yönetimi
-- `EventEngine` ile ALERT/CALM durumu belirleme (eşik değeri yapılandırılabilir)
-- Limiter hakkı bitince: haritada sarı yanıp sönen çerçeve, panelde uyarı, log'a kayıt
-
-### Drone (İHA) Sistemi
-- Waypoint tabanlı rota düzenleme (LOOP / PINGPONG modu)
-- Sensör ve kaynak taşıma (sürükle-bırak)
-- Hız ayarı, rota görselleştirme
-
-### Kullanıcı Arayüzü
-- Sağ panel: nesne özellikleri, ölçüm değerleri, alarm durumu
-- **Log butonu** (harita sağ üst): tüm sensör/kaynak/drone özeti ve olay logu
-- **İsim değiştirme**: her nesneye özel isim verilebilir (uygulama içi input)
-- **Taşıma modu** (M tuşu): nesneleri haritada yeniden konumlandırma
-- Toast mesajları, rota düzenleme banner'ı
-
-### Veri Dışa Aktarma
-- `sensor_log_*.csv`: Tüm sensör ölçümleri (°C, ppm, pil, modlar, limit)
-- `alarm_log_*.csv`: Alarm olayları (zaman, sensör, tip, detay)
-- `threat_polygons_*.jsonl`: Tehdit bölgesi poligon verileri
-
-## Kurulum
+Python 3.10 veya üzeri gerekir. Güncel doğrulama Python 3.12.3, Pygame 2.6.1 ve Linux üzerinde yapıldı.
 
 ```bash
-git clone https://github.com/MrSqy/IoT-Grid-Simulator.git
-cd IoT-Grid-Simulator
-
-python3 -m venv venv
-source venv/bin/activate   # Linux/macOS
-# venv\Scripts\activate    # Windows
-
-pip install -r requirements.txt
+git clone https://github.com/MrSqy/IoT-sensor-grid-simulator.git
+cd IoT-sensor-grid-simulator
+python3 -m venv .venv
+source .venv/bin/activate
+python -m pip install -r requirements.txt
+python main.py
 ```
 
-## Çalıştırma
+Windows PowerShell'de sanal ortam etkinleştirme: `.venv\Scripts\Activate.ps1`. Windows/macOS üzerinde canlı doğrulama yapılmadı.
+
+Uygulama Uzaklık ve ölçüm deneyiyle açılır. **Başlat**, **Tek adım**, **Başa dön** ve **Deneyler** düğmelerini kullan. Boş sahne için **Yeni**. Bir nesneye tıklayıp sağ panelden özelliklerini değiştir; grafik kanalı düğmeleri hem grafiği hem kanal ayarını seçer.
+
+- **Space:** çalıştır/duraklat; **N:** bir örnekleme adımı.
+- **M:** seçili nesneyi taşı; **K:** drone rotası çizmeye başla/bitir; **Esc:** iptal.
+- **DEL veya sağ tık:** ortak kuralla sil; drone yükleri boş yakın karelere bırakılır.
+- **Tekerlek:** haritada zoom, panelde kaydırma. **Orta tuş sürükle:** haritayı kaydır.
+- **Ctrl+S / Ctrl+O:** JSON sahnesi kaydet/yükle.
+- Drone seçiliyken **Haritadan yük seç** veya kaynağı/sensörü drone paneline sürükle. Drone bir sensör ya da üç kaynak taşıyabilir.
+
+## Deneyler
+
+1. Uzaklık ve ölçüm
+2. Gürültü, kalibrasyon ve alarm
+3. Örnekleme ve pil
+4. Bağımsız gaz kanalları
+5. Drone ile hareketli ölçüm
+6. Sıcaklık, maruz kalma süresi ve tutuşma
+
+Her deneyin amacı, adımları ve açıklaması uygulamanın **Deney** sekmesindedir. Ayarları değiştirerek serbest deneyler kurulabilir. Yeni/deney seçimi mevcut sahnenin yerine yeni başlangıç kurar; saklamak istediğin düzeni önce Kaydet ile sakla. Üretilmiş sonuç dosyaları silinmez.
+
+## Sonuçlar ve tekrar üretim
+
+İlk çalıştırma/adımda proje içindeki `exports/` altında benzersiz klasör oluşturulur:
+
+- `experiment.json`: başlangıç sahnesi, tohum, model/sütun sürümü ve birimler.
+- `sensor_log.csv`: her sensör örneğinde dört kanal; kapalı/geçersiz değer boş, geçerlilik ayrı sütunda.
+- `alarm_log.csv`: alarma giriş/çıkış, durum değişimi ve tutuşma olayları.
+- `changes.jsonl`: deney sırasında yapılan düzenlemeler ve simülasyon zamanı.
+
+Kaydet, o andaki düzeni **yeni bir başlangıç sahnesi** olarak saklar; canlı geçmişi ve rastgele üretecin ara durumunu devam ettiren oturum kaydı değildir. Başa dön, deneyin başlangıcını aynı tohumla tekrar kurar. Aynı sahne, tohum ve aynı simülasyon anındaki aynı müdahaleler aynı sonuçları verir.
+
+Pencere açmadan örnek deney:
 
 ```bash
-python3 main.py
+python main.py --lesson 5 --seconds 30 --out-dir /tmp/iot-deney
+python main.py --scene scenes/deney.json --seed 123 --seconds 10 --out-dir /tmp/iot-deney
 ```
 
-## Kontroller
+Sahne şeması 1, model `education-2.0`, sonuç şeması 2'dir. Eski CSV/JSONL dosyaları değiştirilmez. Eski tehdit çokgeni çıkarımı yerine yeni uygulama teorik alan katmanını gösterir; yeni oturumlarda eski çokgen JSONL şeması üretilmez.
 
-| Tuş / İşlem | Açıklama |
-|---|---|
-| **Sol tık** | Seç / Araç seçiliyken yerleştir |
-| **Sağ tık** | Haritadan sil |
-| **DEL / Backspace** | Seçili nesneyi sil |
-| **Space** | Simülasyon başlat/durdur |
-| **G** | Izgara göster/gizle |
-| **M** | Seçili nesneyi taşıma modu |
-| **K** | İHA rota düzenleme (İHA seçiliyken) |
-| **ESC** | Seçimi/modu iptal |
-| **Ctrl + Wheel** | Zoom |
-| **Wheel** | Dikey kaydırma |
-| **Shift + Wheel** | Yatay kaydırma |
+## Öğren ve geliştir
 
-## Proje Yapısı
+- [Ayrıntılı Türkçe proje rehberi](PROJE_REHBERI.md): kurulum, mimari, formüller, kullanıcı akışları ve debug.
+- [Bütün dosya, sınıf ve fonksiyonların kaynak rehberi](docs/KOD_REHBERI.md).
+- [Doğrulama raporu ve sınırları](docs/DOGRULAMA.md).
+- [Onaylı kapsam ve uygulama kaydı](UYGULAMA_PLANI.md).
 
-```
-IoT/
-├── main.py                 # Giriş noktası
-├── CALCULATOR.py           # Olay değerlendirme motoru (EventEngine, RateLimiter, vb.)
-├── requirements.txt
-├── assets/                 # Sensör, kaynak, drone ikonları (PNG)
-├── exports/                # Otomatik oluşturulan CSV/JSONL dosyaları
-└── iot_sim/                # Ana simülasyon paketi
-    ├── __init__.py
-    ├── app.py              # Ana döngü, event handling, çizim
-    ├── models.py           # Veri modelleri (Entity, SensorProps, SourceProps, vb.)
-    ├── sensors.py          # Fizik motoru: sıcaklık/gaz ölçüm hesabı
-    ├── alarm_bridge.py     # CALCULATOR ↔ Sim köprüsü
-    ├── panel.py            # Sağ panel UI (build + draw)
-    ├── render.py           # Harita çizimi, efektler, göstergeler
-    ├── engine.py           # Yardımcı fonksiyonlar (accuracy, bresenham, vb.)
-    ├── constants.py        # Sabitler (ekran boyutu, accuracy tablosu, vb.)
-    ├── camera.py           # Kamera (zoom, pan, screen↔world dönüşümü)
-    ├── cargo.py            # Drone yük taşıma mantığı
-    ├── uav.py              # Drone hareket ve rota takibi
-    ├── fire.py             # Yangın yayılım modeli
-    ├── exporter.py         # CSV/JSONL veri dışa aktarma
-    ├── viz.py              # Görsel efektler (gauss field, dashed circle)
-    ├── ui_widgets.py       # Panel UI bileşenleri (buton, switch, vb.)
-    ├── assets.py           # İkon yükleme ve önbellekleme
-    └── geom.py             # Geometri yardımcıları (polygon area, vb.)
+```bash
+python -B -m unittest discover -s tests -v
+python -B tools/build_guide.py --check
+SDL_VIDEODRIVER=dummy SDL_AUDIODRIVER=dummy python -B tools/verify_runtime.py --output /tmp/iot-dogrulama
 ```
 
-## Gerçek Dünya Eşik Değerleri
+Bu uygulama basit eğitim modelleri kullanır. Teorik alan sensörün çevreyi gerçekten taradığı anlamına gelmez. Eşikler eğitim ayarlarıdır; iş güvenliği, gerçek gaz maruziyeti veya yangın tahmini için doğrulanmış sınırlar değildir. Gerçek cihaz/MQTT bağlantısı bulunmaz.
 
-| Parametre | Alarm Eşiği | Tehlike Seviyesi | Kaynak |
-|---|---|---|---|
-| Sıcaklık | 60°C | 100°C | Yanık riski / kaynar su |
-| CO | 35 ppm | 200 ppm | OSHA 8-saat TWA |
-| CO₂ | 5,000 ppm | 40,000 ppm | OSHA 8-saat TWA |
-| H₂ | 4,000 ppm | 40,000 ppm | %10 LEL (alt patlama limiti) |
+`IoT PyGame/` eski/alternatif sürümdür; kaynakları ve ikonları korunmuştur. Güncel giriş `main.py` dosyasıdır. `CALCULATOR.py` bağımsız sınıf/olay örneğini de içerir; güncel uygulama onun saat enjekte edilebilen kota sınıfını kullanır.
 
-## Ekran Görüntüleri
+## Katkı ve lisans
 
-> Proje çalıştırıldıktan sonra ekran görüntülerini `screenshots/` klasörüne ekleyebilirsiniz.
+Projenin fikri, konsepti ve tasarım sahipliği **Baran Demir B.**'ye aittir. İlk sürümde Anthropic Claude Opus 4.6 ile kod desteği alınmıştır. Bu sürüm kullanıcı tarafından onaylanan öğretici deney kapsamı doğrultusunda geliştirilmiştir.
 
-## Katkı ve Kredi
-
-Bu proje **Baran Bey** tarafından tasarlanmış ve geliştirilmiştir. Projenin fikri, konsepti, simülasyon mimarisi ve tüm tasarım kararları kendisine aittir.
-
-Kod yazım sürecinde **Anthropic Claude Opus 4.6** yapay zeka modelinden teknik destek alınmıştır. AI desteği kod implementasyonu, hata düzeltme ve optimizasyon önerileri ile sınırlıdır; projenin fikri mülkiyeti ve yaratıcı yönü tamamen geliştiriciye aittir.
-
-## 📜 Lisans
-
-[MIT](LICENSE) — `2026 Baran Demir B.`
+[MIT lisansı](LICENSE).
