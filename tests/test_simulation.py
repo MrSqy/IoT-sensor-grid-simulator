@@ -121,6 +121,27 @@ class AlarmTests(unittest.TestCase):
         self.assertFalse(b.slots)
 
 
+class ClockRegressionTests(unittest.TestCase):
+    def test_fire_timestamp_without_sensor_samples(self):
+        source=Entity(1,Kind.SOURCE,1,1,source=SourceProps())
+        tree=Entity(2,Kind.OBSTACLE,2,1,ignition_seconds=.15)
+        sim=Simulation(to_scene([source,tree]))
+        sim.advance(.15)
+        fire=next(ev for ev in sim.alarm.events if ev["kind"]=="FIRE")
+        self.assertEqual(fire["t"],.15)
+
+    def test_repeats_follow_clock_between_measurements(self):
+        sensor=SensorProps(modes={SensorMode.TEMP},noise_percent=0,sample_interval=10,
+                           repeat_seconds=1,limit=5,max_limit=5)
+        sensor.thresholds["TEMP"]=sensor.clear_thresholds["TEMP"]=0
+        sim=Simulation(to_scene([Entity(1,Kind.SENSOR,1,1,sensor=sensor)]))
+        sim.advance(13)
+        repeats=[ev["t"] for ev in sim.alarm.notifications if ev["kind"]=="REPEAT"]
+        self.assertEqual(repeats,[11,12,13])
+        self.assertEqual(len(sim.history[1]),1)
+        self.assertEqual(sim.entities[0].sensor.limit,2)
+
+
 class DroneTests(unittest.TestCase):
     def sim(self):
         return Simulation(lesson_scene(5))

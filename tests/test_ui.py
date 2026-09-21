@@ -1,4 +1,5 @@
 """Pygame'in gerçek çizim ve olay işleyicisini kontrollü SDL girdileriyle sınar."""
+import csv
 import os
 import tempfile
 import unittest
@@ -182,6 +183,38 @@ class UITests(unittest.TestCase):
         self.assertFalse(self.app.selected.flammable)
         self.click("ignition_plus")
         self.assertEqual(self.app.selected.ignition_temp,130)
+
+    def test_toggle_records_invalid_point_and_csv_gap(self):
+        self.app.selected_id=1
+        self.app.action(("play",))
+        self.app.sim.advance(1.25)
+        self.app.action(("toggle","enabled"))
+        row=self.app.sim.history[1][-1]
+        self.assertEqual((row["t"],row["status"],row["measured"]["TEMP"]),(1.25,"OFF",None))
+        self.app.exporter.flush()
+        with self.app.exporter.csv_path.open() as f:
+            rows=[r for r in csv.DictReader(f) if r["sensor_id"]=="1" and r["channel"]=="TEMP"]
+        self.assertEqual((float(rows[-1]["t"]),rows[-1]["status"],rows[-1]["measured"]),(1.25,"OFF",""))
+        self.app.action(("toggle","enabled"))
+        self.assertEqual(self.app.sim.history[1][-1]["status"],"WAITING")
+        self.app.sim.advance(1)
+        self.assertIsNotNone(self.app.sim.history[1][-1]["measured"]["TEMP"])
+
+    def test_map_edit_pauses_running_experiment(self):
+        self.app.action(("play",))
+        self.app.action(("tool",Kind.SENSOR))
+        self.mapclick(8,8)
+        self.assertFalse(self.app.playing)
+        self.assertEqual((self.app.selected.tx,self.app.selected.ty),(8,8))
+
+    def test_scene_replacement_clears_pending_drag_and_tool(self):
+        self.app.drag_origin=(1,2,(100,100))
+        self.app.pan_anchor=(50,50)
+        self.app.tool=Kind.SENSOR
+        self.app.replace_sim(lesson_scene(3))
+        self.assertIsNone(self.app.drag_origin)
+        self.assertIsNone(self.app.pan_anchor)
+        self.assertIsNone(self.app.tool)
 
     def test_exception_path_closes_exporter(self):
         self.app.action(("play",))

@@ -190,6 +190,7 @@ class App:
 
     def change(self,description):
         """Editör değişikliklerini deney çıktısında zamanıyla kaydet."""
+        self.playing=False
         self.sim.revision += 1
         if self.sim.time==0:
             self.sim.baseline=self.sim.snapshot()
@@ -203,6 +204,9 @@ class App:
         self.sim=candidate
         self.playing=False
         self.selected_id=None
+        self.tool=None
+        self.drag_origin=None
+        self.pan_anchor=None
         self.mode=None
         self.mode_id=None
         self.route_points=[]
@@ -322,9 +326,7 @@ class App:
                 mode=args[0]
                 e.sensor.modes.symmetric_difference_update({mode})
                 # Kanal kapatınca geçmiş okumayı geçerli tutma.
-                from .sensors import invalidate
-                invalidate(e.sensor,"WAITING" if e.sensor.modes else "OFF")
-                self.sim.alarm.update(self.sim.entities,self.sim.time)
+                self.sim.invalidate_sensor(e)
                 self.change(name)
             elif name=="gas_mode":
                 e.source.gas_modes.symmetric_difference_update({args[0]})
@@ -336,9 +338,7 @@ class App:
                 target=e.sensor or e.uav
                 setattr(target,args[0],not getattr(target,args[0]))
                 if e.sensor:
-                    from .sensors import invalidate
-                    invalidate(e.sensor,"WAITING" if e.sensor.enabled else "OFF")
-                    self.sim.alarm.update(self.sim.entities,self.sim.time)
+                    self.sim.invalidate_sensor(e)
                 self.change(name)
             elif name=="entity_toggle":
                 setattr(e,args[0],not getattr(e,args[0]))

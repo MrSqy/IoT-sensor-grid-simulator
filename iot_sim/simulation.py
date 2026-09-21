@@ -3,7 +3,7 @@ from collections import defaultdict, deque
 from copy import deepcopy
 import random
 from .alarm_bridge import AlarmBridge
-from .sensors import simulate_tick, VALUE_ATTR
+from .sensors import simulate_tick, invalidate, VALUE_ATTR
 from .fire import spread_fire
 from .uav import update_uavs
 from .scene import to_scene, parse_scene
@@ -44,6 +44,23 @@ class Simulation:
         for event in self.alarm.events:
             exporter.log_event(event)
 
+    def _record_sensor(self, e):
+        """Ölçüm veya geçersizlik geçişini aynı anda grafiğe ve dosyaya yaz."""
+        s = e.sensor
+        self.history[e.id].append(dict(t=self.time, measured={k: getattr(s, attr) for k, attr in VALUE_ATTR.items()},
+            theoretical=dict(s.theoretical), battery=s.battery, status=s.status,
+            thresholds=dict(s.thresholds), alarms=sorted(self.alarm.flags.get(e.id, set()))))
+        if self.exporter:
+            self.exporter.log_sensor(self.time, e, self.entities)
+
+    def invalidate_sensor(self, e):
+        """Editörden kapatılan/değişen sensörün eski okumasını geçersiz kıl."""
+        s = e.sensor
+        status = "OFF" if not s.enabled or not s.modes else "EMPTY" if s.battery <= 0 else "WAITING"
+        invalidate(s, status)
+        self.alarm.update(self.entities, self.time)
+        self._record_sensor(e)
+
     def advance(self, seconds):
         """Süre biriktir; hareket, enerji ve yangını aynı sabit sırada yürüt."""
         if not 0 <= seconds <= 3600:
@@ -56,15 +73,10 @@ class Simulation:
             burning = spread_fire(self.entities, STEP)
             self.steps += 1
             changed = simulate_tick(self.entities, STEP, self.rng)
-            if changed:
-                self.alarm.update(self.entities, self.time)
-                for e in changed:
-                    s = e.sensor
-                    self.history[e.id].append(dict(t=self.time, measured={k: getattr(s, attr) for k, attr in VALUE_ATTR.items()},
-                        theoretical=dict(s.theoretical), battery=s.battery, status=s.status,
-                        thresholds=dict(s.thresholds), alarms=list(self.alarm.flags.get(e.id, set()))))
-                    if self.exporter:
-                        self.exporter.log_sensor(self.time, e, self.entities)
+            # Bildirim ve olay saatleri örnekleme aralığını beklemez.
+            self.alarm.update(self.entities, self.time)
+            for e in changed:
+                self._record_sensor(e)
             for e in burning:
                 self.alarm._emit(e, "TEMP", "FIRE", e.source.temp_celcius, "Tutuşma sıcaklığı ve süresi sağlandı")
         return count
